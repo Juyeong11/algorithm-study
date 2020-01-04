@@ -154,7 +154,7 @@ void addTo(vector<int>& a, vector<int>& b, int k)
 void subFrom(vector<int>& a, const vector<int>& b)
 {
 
-	vector<int> c(a.size() , 0);
+	vector<int> c(a.size(), 0);
 
 	for (int i = 0; i < c.size(); ++i)
 	{
