@@ -24,19 +24,19 @@ int classify(int a, int b)
 {
 	string M = N.substr(a, b - a + 1);
 
-	if (M == string(M.size(), M[0]) == 1)
+	if (M == string(M.size(), M[0]) == 1) //조건 1 모두 같은 수
 		return 1;
 
 	bool progressive = true;
-	for (int i = 0; i < M.size() - 1; ++i)
+	for (int i = 0; i < M.size() - 1; ++i) // 조건 2 등차수열
 		if (M[i + 1] - M[i] != M[1] - M[0])
 			progressive = false;
 
-	if (progressive && abs(M[1] - M[0]) == 1)
+	if (progressive && abs(M[1] - M[0]) == 1)// 조건 3 단조증가 감소
 		return 2;
 
 	bool alternating = true;
-	for (int i = 0; i < M.size(); ++i)
+	for (int i = 0; i < M.size(); ++i)// 조건 4 두개의 숫자가 번갈아가며 나타날 때
 		if (M[i] != M[i % 2])
 			alternating = false;
 
