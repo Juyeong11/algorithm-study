@@ -1,0 +1,132 @@
+//p에서 계산할 마을 번호로 가는 방법(지정한 횟수 안에)을 찾는다.
+//중간 마을에서 이어진마을들을 고려하여 도착할 확률을 구하자
+//다 구현은 가능하나 주어진 시간에 못풀어 책봄
+#include<iostream>
+#include<vector>
+#include<cstring>
+
+using namespace std;
+
+void serch(vector<int> path);
+void set_a();
+
+
+const int A[8][8] = {
+	{0,1,1,1,0,0,0,0},
+	{1,0,0,1,0,0,0,0},
+	{1,0,0,1,0,0,0,0},
+	{1,1,1,0,1,1,0,0},
+	{0,0,0,1,0,0,1,1},
+	{0,0,0,1,0,0,0,1},
+	{0,0,0,0,1,0,0,0},
+	{0,0,0,0,1,1,0,0}
+};
+//        마을수  지난일수  교도소 위치
+const int N = 8,  D = 2,   P = 3;
+
+double a[8];
+int main()
+{	
+	set_a();
+	int tmp[3] ={3,2,3};
+	vector<int> path(tmp,tmp+3);
+	
+	serch(path);
+	for(int i=0;i<N;++i)
+	{
+		cout<<a[i]<<" ";
+	}
+	
+	return 0;		
+}
+
+void set_a()
+{
+	for(int i=0;i<N;++i)
+		a[i] = 1;
+}
+//주어진 경로로 갈경우 도착할 확률
+void serch(vector<int> path)
+{
+	
+	for(int i=0;i<path.size()-1;++i)
+	{
+		int connected = 0;
+		for(int j = 0; j<8 ; ++j)
+		{
+			if(A[path[i]][j] == 1) ++connected;
+		}
+		
+		a[path[i]] = i==0 ? 1/(double)connected : a[path[i-1]] *1/(double)connected;
+	}
+	
+}
+//선택된 마을 까지 가는 방법을 반환한다.
+vector<int> go()
+{
+	
+}
+
+
+
+*********************************************************
+책보고 푼거
+
+// 부족한점
+//1. 메모이제이션 할줄 모름
+//2. 재귀함수를 활용을 못함
+//
+//자주보고 풀고 해서 뇌에 새기자 화이팅
+
+#include<iostream>
+#include<vector>
+#include<cstring>
+
+using namespace std;
+
+double serch(int , int);
+
+
+
+const int A[8][8] = {
+	{0,1,1,1,0,0,0,0},
+	{1,0,0,1,0,0,0,0},
+	{1,0,0,1,0,0,0,0},
+	{1,1,1,0,1,1,0,0},
+	{0,0,0,1,0,0,1,1},
+	{0,0,0,1,0,0,0,1},
+	{0,0,0,0,1,0,0,0},
+	{0,0,0,0,1,1,0,0}
+};
+//        마을수  지난일수  교도소 위치
+const int N = 8,  D = 2,   P = 3;
+int degree[N];
+double cache[51][101];
+int main()
+{
+	for(int i=0;i<51;++i)
+		for(int j=0;j<101;++j)
+			cache[i][j] = -1.0;
+	
+	for(int i=0;i<N;++i)
+		for(int j=0;j<N;++j)
+			if(A[i][j]) ++degree[i];   // 미리 계산해 줌으로써 비용줄임
+						   // 진짜 공부가 더 많이 필요한걸 느낀다
+	cout<<serch(2,3);
+}
+
+double serch(int day,int hear)
+{
+	if(day == 0)
+		return (hear == P ? 1.0 : 0.0);
+	
+	double& ret = cache[day][hear];
+	if(ret > -0.5) return ret;
+	
+	ret = 0.0;
+	for(int there = 0; there < N; ++there)
+	{
+		if(A[hear][there]) ret += serch(day-1,there) / degree[hear]; // 참 쉽죠?
+	}								     // 
+	return ret;
+}
