@@ -1,0 +1,54 @@
+#include<iostream>
+#include<cstring>
+#include<vector>
+
+using namespace std;
+
+int Lis(int start);
+
+int n = 8,k = 6; // 원소의 수, 순위
+int T[8] = {5,1,6,4,3,2,8,7};
+
+int cache[501];
+int cacheCnt[501];
+int MAX = 2000000000
+int main()
+{
+	memset(cache,-1,sizeof(cache));
+	cout<<Lis(0)<<endl;
+}
+
+
+int Lis(int start)
+{
+	int& ret = cache[start+1];
+	
+	if(ret != -1) return ret;
+	ret = 1;
+	for(int i=start+1;i<n;++i)
+		if(start == -1 || T[start] < T[i])
+			ret = max(ret, Lis(i)+1);
+	
+	return ret;
+}
+
+int count(int start)
+{
+	if(Lis(start) == 1) return 1;
+	
+	
+	int& ret = cacheCnt[start + 1];
+	if(ret != -1) return ret;
+	ret = 0;
+	for(int next = start+1; next<n; ++next)
+	{
+		if((start == -1 || T[start] < T[next]) && Lis(start) == Lis(next) + 1)
+			ret = min<long long>(MAX,(long long)ret + count(next));
+	}
+	return ret;
+}
+
+void reconstruct(int start, int skip, vector<int>& lis)
+{
+	//으아!
+}
