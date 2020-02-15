@@ -1,0 +1,61 @@
+#include<iostream>
+#include<string>
+
+
+using namespace std;
+
+char expend(const string& dragonCurve, int generations, int skip);
+void precalc();
+const string X("x+yf");
+const string Y("fx-y");
+
+int main()
+{
+	//세대, p번째 글자, 출력될 글자 수
+	int n = 42, p = 764853475, l = 30;
+	precalc();
+	string dragonCur("fx");
+	for(int i=0;i<11;++i)
+		cout<<expend(dragonCur,2,i);
+}
+
+// xLength(n)=문자열x를 n세대 진화시킨 결과의 길이 반환
+// yLength(n)=문자열y를 n세대 진화시킨 결과의 길이 반환
+//                    |
+// xLength(n) = xLength(n-1) + yLength(n-1) + 2
+// yLength(n) = xLength(n-1) + yLength(n-1) + 2
+//                    |
+// Length(n) = 2+2*Length(n-1)
+const int MAX = 1000000000;
+
+int length[51];
+void precalc()
+{
+	length[0] = 1;
+	for(int i = 1;i<50;++i)
+		length[i] = min(MAX, length[i-1]*2+2);
+}
+
+char expend(const string& dragonCurve, int generations, int skip)
+{
+	if(generations == 0){
+		//assert(skip<dragonCurve.size())
+		return dragonCurve[skip];
+	}
+	for(int i = 0; i<dragonCurve.size(); ++i){
+		if(dragonCurve[i] == 'x' || dragonCurve[i] == 'y'){
+			if(skip >= length[generations])
+				skip -= length[generations];
+			else if(dragonCurve[i] == 'x')
+				return expend(X,generations-1,skip);
+			else
+				return expend(Y,generations-1,skip);
+		}
+		else if(skip > 0)
+			--skip;
+		else
+			return dragonCurve[i];
+	}
+	
+	return '&';//수행안되는 줄
+}
