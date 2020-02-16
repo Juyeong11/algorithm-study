@@ -1,0 +1,40 @@
+39: private 상속은 심사숙고해서 구사하자
+
+ private 상속은 객체사이에 어떤 개념적 관계가 있어서 하는 것이아닌 
+그 자체로 구현 기법 중 하나이다.(is-implemented-in-terms-of)
+
+ 객체 합성과 뜻이 같은데 private상속은 비공개 맴베를 접근하거나 가상 함수를 재정의할
+경우 상속을 사용한다.
+
+ 하지만 private상속을 사용하기 보다는 public상속에 객체 합성의 방법이 더 자주 쓰인다.
+
+class widget{
+private:
+
+	class widgetTimer: public Timer{
+	public:
+		virtual void onTick() const;
+		....
+	};
+
+	widgeTimer timer;
+	...
+};
+
+ 이렇게 사용하는것이 복잡하긴 하지만 두가지 장점이 있다.
+
+ 첫째, widget클래스를 설계하는 데 있어서 파생은 가능하게 하되, 파생 클래스에서
+onTick을 재정의할 수 없도록 설계 차원에서 막을 수 있다.
+
+ 둘째, 컴파일의존성을 최소화 할 수 있다. private상속을 이용하면 widget을 컴파일할때
+Timer의 정의도 끌어와야 하기 때문에 timer헤더 파일도 #include해야 할지도 모른다.
+하지만 객체의 합성으로 할 경우 widgetTimer의 정의를 widget으로부터 빼내고 widget이 widgetTimer
+객체에 대한 포인터만 갖도록 만들면 widgetTimer클래스를 선언하는 것만으로 컴파일 의존성을
+피할 수 있다.
+
+
+ private상속을 사용할 경우 -> 공백 기본 클래스 최적화(empty base optimization: EBO)를 할경우
+
+ C++의 "독립구조의 객체는 반드시 크기가 0이 넘어야 한다"는 규칙에 따라 데이터 맴버가 없는
+클래스의 경우도 크기가 있게 되는데 
+이 때 공백 클래스를 상속을 해주게 되면 독립구조가 아니기때문에 크기가 0이 된다
