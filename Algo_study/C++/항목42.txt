@@ -1,0 +1,15 @@
+42: typename의 두가지 의미를 제대로 파악하자.
+
+template<class T> class Widget;		template<typename T>class Widget;
+
+class와 typename의 차이는 없다.
+
+하지만 typename을 써야만 하는 순간이 있다.
+
+중첩 의존 타입이름을 식별하는 용도에는 반드시 typename을 사용해야한다.-> 컴파일러에게 타입이라고 알려줘야함
+단, 중첨의존이름이 기본크래스 리스트(상속)에 있거나 멤버 초기화 리스트 내의 기본크래스 식별자로
+있는 경우는 예외이다. typename C::const_iterator *x;
+
+의존이름 - 템플릿 내의 이름 중에 템프릿 매개변수에 종속된 것을 가르킴
+
+중첩 의존 이름 - 어떤 클래스 안에 의존이름이 중첩되있는 경우
