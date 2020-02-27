@@ -1,0 +1,53 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+void generate(string price,bool taken[15]);
+	
+string e("12738173912");
+string digits("");
+//   자릿수, 배수
+int n = 11, m = 7;
+
+int main()
+{
+	string price("");
+	bool taken[15] = {0,};// 자리 사용 여부
+
+	
+	int tmp[15];
+	for(int i=0;i<e.size();++i)
+		tmp[i] = (int)e[i];
+	
+	sort(tmp,tmp+e.size());
+	
+	for(int i=0;i<e.size();++i)
+		digits.push_back(tmp[i]);
+	
+	generate(price,taken);
+
+	
+}
+
+void generate(string price,bool taken[15])
+{
+	
+	if(price.size()==n)
+	{
+		//if(price < e)
+			cout<<price<<endl;
+		return ;
+	}
+	
+	for(int i=0;i<n;++i)
+	{
+		if(!taken[i] && (i == 0 || digits[i-1] != digits[i] || taken[i-1]))
+		{
+			taken[i] = true;
+			generate(price + digits[i], taken);
+			taken[i] = false;
+		}
+	}
+}
