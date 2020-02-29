@@ -1,0 +1,123 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+int price(int index, int taked, int mod, int less);
+
+string e("12738173912");
+string digits("");
+//   자릿수, 배수
+int n = 11, m = 7;
+int cache[1>>14][20][2];
+
+int main()
+{
+	memset(cache,-1,sizeof(cache));
+	
+	
+	bool taken[15] = {0,};// 자리 사용 여부
+
+	
+	int tmp[15];
+	for(int i=0;i<e.size();++i)
+		tmp[i] = (int)e[i];
+	
+	sort(tmp,tmp+e.size());
+	
+	for(int i=0;i<e.size();++i)
+		digits.push_back(tmp[i]);
+	
+//	generate(price,taken);
+	int a = 1<<14;
+	cout<<digits<<endl;
+	cout<< 400 + digits[0]-'1' <<endl;
+	
+}
+
+const int MOD = 1000000007;
+
+//O(nm2^n);
+int price(int index, int taked, int mod, int less)
+{
+	if(index==n)
+		return (less && mod == 0) ? 1 : 0;
+	
+	int& ret = cache[taked][mod][less];
+	if(ret != -1) return ret;
+	
+	ret =0;
+	for(int next = 0; next < n; ++next)
+		if((taked & (1<<next)) == 0)
+		{
+			if(!less && e[index]<digits[next])
+				continue;
+			
+			if(next >0 && digits[next-1] == digits[next] && (taked & (1<<(next-1))) == 0)
+				continue;
+			
+			int nextTaken = taked | (1<<next);
+			int nextMod = (mod*10+digits[next]-'0')%m;
+			int nextLess = less || e[index] > digits[next];
+			ret += price(index+1, nextTaken, nextMod, nextLess);
+			ret %= MOD;
+		}
+	return ret;
+}
+/*
+#include<iostream>
+ #include<string>
+ #include<algorithm>
+
+ using namespace std;
+
+ void generate(string price,bool taken[15]);
+
+ string e("12738173912");
+ string digits("");
+ //   자릿수, 배수
+ int n = 11, m = 7;
+
+ int main()
+ {
+ 	string price("");
+ 	bool taken[15] = {0,};// 자리 사용 여부
+
+
+ 	int tmp[15];
+ 	for(int i=0;i<e.size();++i)
+ 		tmp[i] = (int)e[i];
+
+ 	sort(tmp,tmp+e.size());
+
+ 	for(int i=0;i<e.size();++i)
+ 		digits.push_back(tmp[i]);
+
+ 	generate(price,taken);
+
+
+ }
+
+ void generate(string price,bool taken[15])
+ {
+
+ 	if(price.size()==n)
+ 	{
+ 		//if(price < e)
+ 			cout<<price<<endl;
+ 		return ;
+ 	}
+
+ 	for(int i=0;i<n;++i)
+ 	{
+ 		if(!taken[i] && (i == 0 || digits[i-1] != digits[i] || taken[i-1]))
+ 		{
+ 			taken[i] = true;
+ 			generate(price + digits[i], taken);
+ 			taken[i] = false;
+ 		}
+ 	}
+ }
+*/
