@@ -1,0 +1,69 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+
+using namespace std;
+
+int marge(string result, string tmp, int index, int take);
+string match(string a,string b);
+
+int k = 3;
+string str[3] = {"geo","oji","jing"};
+//{"abrac","cadabra","dabr"};
+int main()
+{
+
+	string tmp("");
+	string tmp1("");
+	
+	
+	
+	cout<<marge(tmp1,tmp, 0,0)<<endl;
+}
+
+string match(string a, string b)
+{
+	//같은 부분을 삭제하고 합친다.
+	
+	int le = 0, re = 0;
+	while(le < a.size() && re < b.size())
+	{
+		if(a[le] == b[re])
+		{ 
+			le++;
+			re++;
+		}
+		else
+			le++;
+	}
+	a.erase(a.size()-re, a.size());
+	
+	return a+b;
+	
+}
+const int MAX = 999999999;
+int marge(string result, string t, int index, int take)
+{
+	if(index == k){
+		cout<<result<<endl;
+		return t.size() - 1;
+	}
+	int ret = 0;
+	for(int i=0;i<k;++i)
+	{
+		if( (take & (1<<i)) ==0)
+		{
+			int nextTake = take | 1<<i;
+			
+			//cout<<t<<endl;
+			result = match(t,str[i]);// 왜 여기서 꼬인답이 나오는지 알아봐야겠다
+			
+			ret = min(marge(result,t + str[i], index + 1, nextTake),MAX);
+			//
+			
+		}
+		
+	}
+	
+	return ret;
+}
