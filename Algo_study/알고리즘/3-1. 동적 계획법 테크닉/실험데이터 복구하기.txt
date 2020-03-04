@@ -1,0 +1,120 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+
+using namespace std;
+
+int marge(string result, string tmp, int index, int take);
+void match();
+int restore(int last, int used);
+string reconstruct(int last, int used);
+
+int k = 3;
+
+const int MAX_N = 15;
+string word[MAX_N] = {"geo","oji","jing"};//{"abrac","cadabra","dabr"};
+int cache[MAX_N][1<<MAX_N], overlap[MAX_N][MAX_N];
+
+
+int main()
+{
+	memset(cache,-1,sizeof(cache));
+	
+	match();
+	
+	for(int i = 0; i < k;++i)
+	{
+		for(int j = 0; j<k;++j)
+			cout<<overlap[i][j];
+		cout<<endl;
+	}
+	
+	cout<<restore(0,0)<<endl;
+	
+	cout<<reconstruct(0,0);
+}
+
+void match()
+{
+	//같은 부분을 삭제하고 합친다.
+	
+	for(int i = 0; i < k;++i)
+		for(int j = 0; j<k;++j)
+		{
+			int last = 0, next = 0;
+			if(i == j) continue;
+			while(next < word[i].size() && last < word[j].size())
+			{
+				if( word[i][last] ==  word[j][next])
+				{ 
+					++last;
+					++next;
+				}
+				else
+					++last;
+			}
+			overlap[i][j] = next;
+		}
+}
+const int MAX = 999999999;
+
+int restore(int last, int used)
+{
+	if(used==(1<<k)-1) return 0;
+	
+	int& ret = cache[last][used];
+	if(ret != -1) return ret;
+	ret = 0;
+	for(int next = 0;next < k;++next)
+	{
+		if((used & 1<<next) == 0)
+		{
+			int cand = overlap[last][next] + restore(next,used + (1<<next));
+			ret = max(ret, cand);
+		}
+	}
+	return ret;
+}
+
+string reconstruct(int last, int used)
+{
+	if(used == (1<<k)-1) return "";
+	
+	for(int next = 0; next < k; ++next)
+	{
+		if(used & (1<<next)) continue;
+		
+		int ifUsed = restore(next, used + (1<<next)) + overlap[last][next];
+		
+		if(restore(last, used) == ifUsed)
+			return (word[next].substr(overlap[last][next]) + reconstruct(next,used + (1<<next)));
+	}
+	return "/****************/";
+}
+/*
+int marge(string result, string t, int index, int take)
+{
+	if(index == k){
+		cout<<result<<endl;
+		return t.size() - 1;
+	}
+	int ret = 0;
+	for(int i=0;i<k;++i)
+	{
+		if( (take & (1<<i)) ==0)
+		{
+			int nextTake = take | 1<<i;
+			
+			//cout<<t<<endl;
+			result = match(t,str[i]);
+			
+			ret = min(marge(result,t + str[i], index + 1, nextTake),MAX);
+			//
+			
+		}
+		
+	}
+	
+	return ret;
+}
+*/
