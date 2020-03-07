@@ -1,0 +1,39 @@
+#include<iostream>
+
+
+using namespace std;
+int play(int left, int right);
+
+const int EMPTY = -987654321;
+int n, board[50] = {7,-5,8,5,1,-4,-8,6,7,9,};
+int cache[50][50];
+int main()
+{
+	for(int i=0;i<50;++i)
+		for(int j = 0;j<50;++j)
+			cache[i][j] = EMPTY;
+	
+	for(int a:board)
+		cout<<a;
+	cout<<play(0,9)<<endl;
+}
+
+//한번 호출 될때 마다 현우-서하-현우-서하 이런식으로 경우의 수를 선택하는 느낌?
+int play(int left, int right)
+{
+	if(left > right) return 0;
+	int& ret = cache[left][right];
+	if(ret != EMPTY) return ret;
+	
+	//가져감
+	ret = max(board[left] - play(left + 1, right), board[right] - play(left, right - 1));
+	
+	//지움
+	if(right - left + 1 >= 2){
+		ret = max(ret, -play(left + 2, right));
+		ret = max(ret, -play(left, right - 2));
+	}
+	return ret;
+}
+//재귀함수를 play(state, player)로 바꿔 보자
+//현재 게임판에 남은 수들이 state라고 가정하고, 이번 차례가 player라고 할 때(현우 점수)-(서하 점수)
