@@ -1,0 +1,65 @@
+#include<iostream>
+#include<vector>
+#include<cstring>
+
+
+using namespace std;
+
+inline int cell(int y,int x){ return 1<<(y*5+x);}//yx좌표를 32비트 정수로 표시
+char play(int board);
+void precalc();
+
+vector<int> moves;
+char cache[1<<25];
+
+int main()
+{
+	for(char& a:cache)
+		a = -1;
+	
+	precalc();
+	
+	
+	if(play(6+7+10+11+14+15+17+18+19+22))
+		cout<<"win"<<endl;
+	else
+		cout<<"lose"<<endl;
+	
+}
+void precalc()
+{
+	for(int y=0; y<4; ++y)
+		for(int x=0;x<4;++x)
+		{
+			vector<int> cells;
+			for(int dy = 0; dy <2 ;++dy)
+				for(int dx = 0; dx < 2; ++dx)
+					cells.push_back(cell(y+dy, x+dx));
+			int square = cells[0] + cells[1] + cells[2] + cells[3];
+			for(int i = 0; i < 4; ++i)
+				moves.push_back(square - cells[i]);//ㄱ모양의 블록의 위치 값을 저장
+		}
+	
+	for(int i = 0; i<5; ++i)
+		for(int j = 0; j<4; ++j)
+		{
+			moves.push_back(cell(i,j) + cell(i,j+1));
+			moves.push_back(cell(j,i) + cell(j+1,i));//-모양의 블록의 위치값을 저장
+		}
+	
+}
+
+char play(int board)
+{
+	char& ret = cache[board];
+	if(ret != -1) return ret;
+	ret = 0;
+	
+	for(int i=0;i < moves.size(); ++i)
+		if((moves[i] & board) == 0)//해당 블록이 곂치는 부분이 없으면
+			if(!play(board | moves[i])){// play의 리턴값이 0이면
+				ret = 1;
+				break;
+			}
+	return ret;
+}
