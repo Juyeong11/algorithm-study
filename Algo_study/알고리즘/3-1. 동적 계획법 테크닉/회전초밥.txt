@@ -1,0 +1,45 @@
+#include<iostream>
+
+using namespace std;
+int sushi(int budget);
+
+
+int price[6] = {2500,3000,4000,5000,10000,15000};
+int pref[6] = {7,9,10,12,20,1};
+int main()
+{
+	cout<<sushi(10000)<<endl;
+}
+
+int sushi(int budget)
+{
+	//int& ret = cache[max_budget]  이건 가격이 10억이라 힘들어용
+	int ret = 0;
+	for(int i=0;i<6;++i)
+	{
+		if(budget < price[i]) continue;
+		ret = max(sushi(budget-price[i])+pref[i],ret);
+	}
+	
+	return ret;
+}
+
+//반복적 동적 계획법
+int n,m;
+int c[201]// 초밥의 최대 가격은 20000원이고 단위는 100원이므로 가격은 200가지 이상으로 안나온다
+int sushi3()
+{
+	int ret = 0;
+	c[0];
+	for(int budget = 1; budget <= m;++budget)
+	{
+		int cand = 0;
+		for(int dish = 0; dish < n;++dish)
+			if(budget >= price[dish])
+				cand = max(cand, c[(budget - price[dish])%201] + pref[dish]);
+		c[budget % 201] = cand;
+		ret = max(ret,cand);
+		
+	}
+	return ret;
+}
