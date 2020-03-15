@@ -1,0 +1,71 @@
+#include<iostream>
+#include<vector>
+#include<cstring>
+using namespace std;
+vector<double> getprob();
+
+//다음곡으로 재생될 확률 T[i->j]
+double T[50][50]={
+	{0.08,0.47,0.12,0.33,},
+	{0.10,0.02,0.39,0.49,},
+	{0.08,0.33,0.35,0.24,},
+	{0.14,0.19,0.58,0.09,},
+};
+
+int n=4;//들어있는 곡 수
+int m=4;//좋아하는 곡
+int k=1000;//재생시간
+int length[50] = {4,3,4,4,};//각 곡의 길이
+
+int main()
+{
+	
+
+	for(double& b:getprob())
+		cout<<b<<endl;
+}
+
+vector<double> getprob()
+{
+	double c[5][50];
+	memset(c,0,sizeof(c));
+	c[0][0]=1.0;
+	for(int time = 1; time<k;++time)
+		for(int song = 0; song<n;++song)
+		{
+			double& prob=c[time%5][song];
+			prob = 0;
+			for(int last = 0; last < n;++last)
+				prob += c[(time - length[last] + 5)%5][last] * T[last][song];
+			//cout<<T[0][song];
+		}
+	vector<double> ret(n);
+	
+	for(int song = 0; song < n;++song)
+		for(int start = k-length[song]+1; start <= k; ++start)
+			ret[song] += c[start%5][song];
+	
+	return ret;
+}
+
+//행렬의 거듭제곱을 이용해 수행시간을 줄였다
+/*
+vector<double> getProb2()
+{
+	SquareMatrix W(4*n);
+	
+	for(int i =0;i<3*n;++i)
+		W[i][i+n] = 1.0;
+	
+	for(int i=0;i<n;++i)
+		for(int j=0;j<n;++j)
+			W[3*n+i][(4-length[j])*n+j] = T[j][i];
+	
+	SquareMatrix Wk = W.pow(k);
+	vector<double> ret(n);
+	
+	for(int song = 0; song<n;++song)
+		for(int start = 0; start < length[song];++start)
+			ret[song] += Wk[(3-start)*n+song][3*n];
+	return ret;
+}*/
