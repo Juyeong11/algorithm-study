@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+
+
+class String{
+	public:
+	String(char* str)
+	{
+		a = new char[10];
+		strcpy(a,str);
+		
+	}
+	operator char*()
+	{
+		return a;
+	}
+	
+	void operator =(const char* str)
+	{
+		strcpy(a,str);
+	}
+	private:
+	char* a;
+};
+int main() {
+	
+	//String t("Hello");
+	const char* sz= "Hello";
+	String s("HI~");
+	s = sz;
+	cout<<s<<endl;
+	return 0;
+}
