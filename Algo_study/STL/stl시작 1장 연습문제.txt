@@ -1,3 +1,4 @@
+/*20.3.17
 #include <iostream>
 #include <cstring>
 
@@ -7,18 +8,18 @@ using namespace std;
 
 class String{
 	public:
-	String(char* str)
+	String(char* str) //const 사용하자
 	{
-		a = new char[10];
+		a = new char[10];//홰이렇게한거야ㅋ
 		strcpy(a,str);
 		
 	}
-	operator char*()
+	operator char*() //const 사용하자
 	{
 		return a;
 	}
 	
-	void operator =(const char* str)
+	void operator =(const char* str) //깊은복사를 했어야지
 	{
 		strcpy(a,str);
 	}
@@ -32,5 +33,61 @@ int main() {
 	String s("HI~");
 	s = sz;
 	cout<<s<<endl;
+	return 0;
+}
+*/
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+class String
+{
+	private:
+	char* buf;
+	public:
+	String(const char* sz)
+	{
+		buf = new char[strlen(sz)+1];
+		strcpy(buf,sz);
+	}
+	~String()
+	{
+		delete [] buf;
+	}
+	// 답지
+	/*const String& operator=(const String& arg)
+	{
+		delete [] buf;
+		buf = new char[strlen(arg.buf)+1];//arg.buf 에 어떻게 접근하는거죠?
+		strcpy(buf,arg.buf);
+		
+		return *this;
+	}
+	*/
+	// effective c++ 항목 11 자기 대입에 대한 처리가 빠지지 않도록 하자
+	const String& operator=(const String& arg)
+	{
+		char* tmp = new char[strlen(arg.buf)+1];
+		strcpy(tmp,arg.buf);
+		
+		buf = new char[strlen(arg.buf)+1];
+		strcpy(buf,arg.buf);
+		delete []tmp;
+		
+		return *this;
+	}
+	char* get()
+	{
+		return buf;
+	}
+};
+
+int main()
+{
+	const char* sz = "Hello!";
+	String s("Hi");
+	s = sz;// String(sz)암묵적인 생서자를 이용한 타입변환
+	cout<<s.get()<<endl;
 	return 0;
 }
