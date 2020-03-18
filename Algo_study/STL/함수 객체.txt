@@ -1,0 +1,118 @@
+/*
+#include<iostream>
+
+using namespace std;
+
+class Adder
+{
+	int total;
+	public:
+	explicit Adder(int n=0):total(n){}
+	
+	int operator()(int n)
+	{
+		return total += n;
+	}
+};
+
+int main()
+{
+	Adder add(0);
+	
+	cout<<add(10)<<endl;
+	cout<<add(20)<<endl;
+	
+	return 0;
+}*/
+
+/*
+//STL less 예제
+#include<iostream>
+#include<functional> // less<>헤더
+using namespace std;
+
+bool Pred_less(int a, int b)
+{
+	return a<b;
+}
+
+//struct Less
+//{
+//	bool operator() (int a, int b)
+//	{
+//		return a<b;
+//	}
+//};
+
+typedef less<int> Less;// 짧게 쓸려고 한거에요 의미없어
+
+int main()
+{
+	Less l;
+	
+	cout<< Pred_less(10,20)<<endl;
+	cout<<endl;
+	
+	cout<<l(10,20)<<endl;
+	cout<<Less()(20,10)<<endl;//암시적 호출
+	cout<<endl;
+	
+	cout<<l.operator()(10,20)<<endl;//명시적 호출
+	
+	return 0;
+	
+}*/
+
+//2번
+#include<iostream>
+
+using namespace std;
+
+class Equal
+{
+	
+	public:
+	explicit Equal(){}
+	
+	bool operator()(int a, int b)
+	{
+		return a == b;
+	}
+};
+
+int main()
+{
+	Equal cmp;
+	
+	cout<<cmp(10,10)<<endl;
+	
+	
+	return 0;
+}
+
+//3번
+/*#include<iostream>
+
+using namespace std;
+
+class Adder
+{
+	int total;
+	public:
+	explicit Adder(int n=0):total(n){}
+	
+	int operator()(int a, int b)
+	{
+		return total = a + b;
+	}
+};
+
+int main()
+{
+	Adder add(0);
+	
+	cout<<add(10,20)<<endl;
+	
+	
+	return 0;
+}*/
