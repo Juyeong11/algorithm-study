@@ -1,0 +1,331 @@
+/*
+#include<iostream>
+
+using namespace std;
+
+template<typename T>// template<typename T, int size> 이렇게 정수형도 들어갈 수 있다.
+void Swap(T &a,T& b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+
+int main()
+{
+	int n1 = 10, n2 = 20;
+	double d1 = 1.1, d2 = 2.2;
+	
+	cout<<n1<<", "<<n2<<endl;
+	Swap(n1,n2);
+	cout<<n1<<", "<<n2<<endl;
+	cout<<endl;
+	
+	cout<<d1<<", "<<d2<<endl;
+	Swap(d1,d2);
+	cout<<d1<<", "<<d2<<endl;
+	
+}
+*/
+/*
+//함수 템플릿 특수화
+//특정 매개변수만의 특수한 함수템플릿을 지원함
+#include<iostream>
+
+using namespace std;
+
+class Point
+{
+	int x; int y;
+	public:
+	explicit Point(int _x, int _y): x(_x), y(_y){}
+	void Print() const { cout<<x<<", "<<y<<endl; }
+	
+};
+
+//일반화 함수 템플릿
+template<typename T>
+void Print(T a)
+{
+	cout<<a<<endl;
+}
+
+//특수화 템플릿
+template<>
+void Print(Point a)// 명시적인 코드 : void Print<Point>(Point a)
+{
+	cout<<"Print 특수화 버전: ";
+	a.Print();
+}
+
+int main()
+{
+	int n = 10;
+	double d = 2.5;
+	Point pt(2,3);
+	
+	Print(n);
+	Print(d);
+	Print(pt);//특수화 버전 호출
+	
+	return 0;
+}*/
+/*
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+template<typename T>// template<typename T=int,int capT=100> -> A<> 디폴트 매개변수로 호출이 가능하다.
+class Array
+{
+	T* buf;
+	int size;
+	int capacity;
+	public:
+	explicit Array(int cap = 100):buf(0), size(0), capacity(cap)
+	{
+		buf = new T[capacity];
+	}
+	
+	~Array(){ delete []buf;}
+	
+	void Add(T data) { buf[size++] = data; }
+	
+	T operator[](int idx) const { return buf[idx];}
+	
+	int GetSize() const{ return size; }
+	
+};
+
+int main()
+{
+	Array<string> sarr;
+	sarr.Add("adc");
+	sarr.Add("def");
+	
+	for(int i=0;i< sarr.GetSize(); ++i)
+		cout<< sarr[i]<<" ";
+	cout<<endl;
+	
+	return 0;
+}
+*/
+
+//클래스 템플릿 특수화
+/*
+#include<iostream>
+#include<string>
+using namespace std;
+
+template<typename T>
+class ObjectInfo
+{
+	T data;
+	public:
+	ObjectInfo(const T& d):data(d){}
+	
+	void Print()
+	{
+		cout<<"타입 : "<<typeid(data).name()<<endl;
+		cout<<"크기 : "<<sizeof(data)<<endl;
+		cout<<"값 : "<< data << endl;
+		cout<<endl;
+	}
+};
+
+template<>
+class ObjectInfo<string>
+{
+	string data;
+	public:
+	ObjectInfo(const string& d):data(d){}
+	
+	void Print()
+	{
+		cout<<"타입 : string, "<<typeid(data).name()<<endl;
+		cout<<"문자열의 길이: "<<data.size()<<endl;
+		cout<<"값 : "<< data << endl;
+		cout<<endl;
+	}
+};
+
+int main()
+{
+	ObjectInfo<int> d1(10);
+	d1.Print();
+	
+	ObjectInfo<double> d2(5.5);
+	d2.Print();
+	
+	ObjectInfo<string> d3("asdf");
+	d3.Print();
+	
+	return 0;
+}
+*/
+
+//함수 객체를 이용한 템플릿 예제
+/*
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+template<typename IterT,typename Func>// 타입매개변수의 포인터는 뭘까
+void For_each(IterT begin, IterT end, Func pf)
+{
+	while(begin != end)
+	{
+		pf(*begin++);
+	}
+}
+
+template<typename T>
+struct PrintFunctor
+{
+	string sep;//출력 구분자 정보
+	
+	explicit PrintFunctor(const string& s=" "):sep(s){}
+	
+	void operator()(T data) const
+	{
+		cout<< data << sep;
+	}
+};
+
+int main()
+{
+	int arr[5] = {1,2,3,4,5};
+	For_each(arr, arr+5, PrintFunctor<int>("a "));
+	cout<<endl;
+}
+*/
+
+//예제 문제
+//1번
+/*
+#include<iostream>
+
+using namespace std;
+
+
+template<typename T>
+void Copy(T* b,T* a,int size)
+{
+	for(int i=0; i<size; ++i)
+	{
+		b[i] = a[i];
+	}
+	
+}
+
+int main()
+{
+	int arr1[5] = {1,2,3,4,5};
+	int arr2[5];
+	
+	Copy(arr2,arr1,5);
+	for(int a:arr2)
+		cout<<a<<" ";
+	cout<<endl;
+	double arr3[5] = {1.1,2.2,3.3,4.4,5.5};
+	double arr4[5];
+	
+	Copy(arr4,arr3,5);
+		for(double a:arr4)
+		cout<<a<<" ";
+	cout<<endl;
+}
+*/
+//2번 stack
+/*
+#include<iostream>
+
+using namespace std;
+
+template<typename T>
+class Stack
+{
+	T buf[100];
+	int top;
+	public:
+	Stack(): top(0){}
+	
+	void Push(T data)
+	{
+		buf[top++] = data;
+		
+	}
+	
+	T Pop()
+	{
+		if(top != 0) 
+			return buf[--top];
+		return buf[0];
+	}
+	
+	bool Empty()
+	{
+		return top == 0;	
+	}
+};
+
+int main()
+{
+	Stack<int> st;//()의 차이가 뭐야?
+	
+	st.Push(10);
+	
+	if(!st.Empty())
+		cout<<st.Pop()<<endl;
+}
+*/
+//3번
+#include<iostream>
+
+using namespace std;
+
+template<typename T>
+class Queue
+{
+	T buf[100];
+	int top;
+	int bot;
+	public:
+	Queue(): top(0), bot(0){}
+	
+	void Push(T data)
+	{
+		buf[top++] = data;
+		
+	}
+	
+	T Pop()
+	{
+		if(bot != 99) 
+			return buf[bot++];
+		return buf[0];
+	}
+	
+	bool Empty()
+	{
+		return top == 0;	
+	}
+};
+
+int main()
+{
+	Queue<int> st;//()의 차이가 뭐야?
+	
+	st.Push(10);
+	st.Push(20);
+	st.Push(30);
+	
+	if(!st.Empty())
+		cout<<st.Pop()<<endl;
+	if(!st.Empty())
+		cout<<st.Pop()<<endl;
+	if(!st.Empty())
+		cout<<st.Pop()<<endl;
+}
