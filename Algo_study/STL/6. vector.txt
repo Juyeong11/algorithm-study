@@ -1,0 +1,87 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main()
+{
+	//vector는 배열 기반 컨테이너면서 원소를 계속 컨테이너에 계속 추가할 수 있는 컨테이너 입니다.
+	//배열 기반 컨테이너이기 때문에 연속된 메모리를 한 번에 할당하지만 원소가 추가 될때 마나 재할당 후 복사를 하려면 
+	//비효율적이기 때문에 미리 넉넉한 메모리를 확보해 재할당과 복사에 드는 문제를 해결합니다.
+	//
+	//이렇게 계속 할당과 복사를하면 문제가 발생할 수 있으므로 vector는 미리 메모리를 할당 할 수 있는 메모리 예약함수
+	//reserve()를 제공 합니다. reserve를 사용하면 원소가 추가되더라도 메모리를 재할당하지 않습니다.
+	vector<int> v;
+	
+	for(int i=0;i<8;++i)
+	{
+		cout<<"size : "<<v.size()<<"  capacity : "<<v.capacity()<<endl; // capacity는 vector만 지원하는 함수이며 저장할 수 있는 메모리공간의 크기를 나타낸다
+		v.push_back(i);
+	}
+	cout<<endl;
+	
+	vector<int> v1;
+	
+	v1.reserve(8);//메모리 공간을 8로 예약합니다.
+	for(int i=0;i<15;++i)
+	{
+		cout<<"size : "<<v1.size()<<"  capacity : "<<v1.capacity()<<endl;
+		v1.push_back(i);
+	}
+	
+	//resize를 이용해 size를 키울때는 capacity도 커지지만
+	//size를 줄일 때는 capacity는 줄지 않는다.
+	//v1.resize(5);
+	v.swap(v1);
+	for(int& a: v1)
+		cout<<a<<" ";
+	cout<<endl;
+	for(int& a: v)
+		cout<<a<<" ";
+	cout<<endl;
+	
+	cout<<"size : "<<v1.size()<<"  capacity : "<<v1.capacity()<<endl;
+	cout<<"size : "<<v.size()<<"  capacity : "<<v.capacity()<<endl;
+
+	
+	cout<<endl;
+	
+	//clear()를 이용하여 컨테이너를 비울 경우 메모리는 제거 되지 않고 남아있습니다.
+	//메모리를 제거 하고 싶은 경우에는 컨테이너 객체끼리 교환할 수 있는 swap함수를 사용하여 제거 할 수 있습니다.
+	
+	vector<int> v2(5);
+	cout<<"size : "<<v2.size()<<"  capacity : "<<v2.capacity()<<endl;
+
+	vector<int>().swap(v2);//기본 생성자로 만든 vector 컨테이너와 v 컨테이너를 swap한다.
+	cout<<"size : "<<v2.size()<<"  capacity : "<<v2.capacity()<<endl;
+	cout<<endl;
+	
+	//vector는 일반 배열처럼 임의 위치의 원소를 찹조하는 두 인터페이스를 제공합니다. at(), []입니다.
+	//at()은 범위 점검을 하여 범위 밖이면 out_of_range예외가 발생합니다.
+	//[]범위점검을 하지 않아 속도가 빠르지만 안전성이 떨어진다는 단점이 있습니다.
+	
+	
+	
+	//[v.begin,v.end)-> [v.rbegin,v.rend)
+	//
+	vector<int> v3;
+	
+	v3.push_back(10);
+	v3.push_back(20);
+	v3.push_back(30);
+	v3.push_back(40);
+	v3.push_back(50);
+	
+	vector<int>::iterator iter;// 정방향 반복자
+	vector<int>::reverse_iterator riter;// 역방향 반복자
+	
+	for(iter = v3.begin(); iter != v3.end(); ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	
+	for(riter = v3.rbegin(); riter != v3.rend();++riter)// 역방향 반복자의 첫 원소(정방향 반복자의 끝)를 가르키는 반복자
+		cout<<*riter<<" ";
+	cout<<endl;
+	
+	//assign(b,a) [b, a) 로 할당한다.
+	return 0;
+}
