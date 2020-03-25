@@ -3,7 +3,7 @@
 
 using namespace std;
 
-template<typename T>// template<typename T, int size> ÀÌ·¸°Ô Á¤¼öÇüµµ µé¾î°¥ ¼ö ÀÖ´Ù.
+template<typename T>// template<typename T, int size> ì´ë ‡ê²Œ ì •ìˆ˜í˜•ë„ ë“¤ì–´ê°ˆ ìˆ˜ ìˆë‹¤.
 void Swap(T &a,T& b)
 {
 	T temp = a;
@@ -28,8 +28,8 @@ int main()
 }
 */
 /*
-//ÇÔ¼ö ÅÛÇÃ¸´ Æ¯¼öÈ­
-//Æ¯Á¤ ¸Å°³º¯¼ö¸¸ÀÇ Æ¯¼öÇÑ ÇÔ¼öÅÛÇÃ¸´À» Áö¿øÇÔ
+//í•¨ìˆ˜ í…œí”Œë¦¿ íŠ¹ìˆ˜í™”
+//íŠ¹ì • ë§¤ê°œë³€ìˆ˜ë§Œì˜ íŠ¹ìˆ˜í•œ í•¨ìˆ˜í…œí”Œë¦¿ì„ ì§€ì›í•¨
 #include<iostream>
 
 using namespace std;
@@ -43,18 +43,18 @@ class Point
 	
 };
 
-//ÀÏ¹İÈ­ ÇÔ¼ö ÅÛÇÃ¸´
+//ì¼ë°˜í™” í•¨ìˆ˜ í…œí”Œë¦¿
 template<typename T>
 void Print(T a)
 {
 	cout<<a<<endl;
 }
 
-//Æ¯¼öÈ­ ÅÛÇÃ¸´
+//íŠ¹ìˆ˜í™” í…œí”Œë¦¿
 template<>
-void Print(Point a)// ¸í½ÃÀûÀÎ ÄÚµå : void Print<Point>(Point a)
+void Print(Point a)// ëª…ì‹œì ì¸ ì½”ë“œ : void Print<Point>(Point a)
 {
-	cout<<"Print Æ¯¼öÈ­ ¹öÀü: ";
+	cout<<"Print íŠ¹ìˆ˜í™” ë²„ì „: ";
 	a.Print();
 }
 
@@ -66,7 +66,7 @@ int main()
 	
 	Print(n);
 	Print(d);
-	Print(pt);//Æ¯¼öÈ­ ¹öÀü È£Ãâ
+	Print(pt);//íŠ¹ìˆ˜í™” ë²„ì „ í˜¸ì¶œ
 	
 	return 0;
 }*/
@@ -76,7 +76,7 @@ int main()
 
 using namespace std;
 
-template<typename T>// template<typename T=int,int capT=100> -> A<> µğÆúÆ® ¸Å°³º¯¼ö·Î È£ÃâÀÌ °¡´ÉÇÏ´Ù.
+template<typename T>// template<typename T=int,int capT=100> -> A<> ë””í´íŠ¸ ë§¤ê°œë³€ìˆ˜ë¡œ í˜¸ì¶œì´ ê°€ëŠ¥í•˜ë‹¤.
 class Array
 {
 	T* buf;
@@ -112,7 +112,7 @@ int main()
 }
 */
 
-//Å¬·¡½º ÅÛÇÃ¸´ Æ¯¼öÈ­
+//í´ë˜ìŠ¤ í…œí”Œë¦¿ íŠ¹ìˆ˜í™”
 /*
 #include<iostream>
 #include<string>
@@ -127,9 +127,9 @@ class ObjectInfo
 	
 	void Print()
 	{
-		cout<<"Å¸ÀÔ : "<<typeid(data).name()<<endl;
-		cout<<"Å©±â : "<<sizeof(data)<<endl;
-		cout<<"°ª : "<< data << endl;
+		cout<<"íƒ€ì… : "<<typeid(data).name()<<endl;
+		cout<<"í¬ê¸° : "<<sizeof(data)<<endl;
+		cout<<"ê°’ : "<< data << endl;
 		cout<<endl;
 	}
 };
@@ -143,9 +143,9 @@ class ObjectInfo<string>
 	
 	void Print()
 	{
-		cout<<"Å¸ÀÔ : string, "<<typeid(data).name()<<endl;
-		cout<<"¹®ÀÚ¿­ÀÇ ±æÀÌ: "<<data.size()<<endl;
-		cout<<"°ª : "<< data << endl;
+		cout<<"íƒ€ì… : string, "<<typeid(data).name()<<endl;
+		cout<<"ë¬¸ìì—´ì˜ ê¸¸ì´: "<<data.size()<<endl;
+		cout<<"ê°’ : "<< data << endl;
 		cout<<endl;
 	}
 };
@@ -165,14 +165,14 @@ int main()
 }
 */
 
-//ÇÔ¼ö °´Ã¼¸¦ ÀÌ¿ëÇÑ ÅÛÇÃ¸´ ¿¹Á¦
+//í•¨ìˆ˜ ê°ì²´ë¥¼ ì´ìš©í•œ í…œí”Œë¦¿ ì˜ˆì œ
 /*
 #include<iostream>
 #include<string>
 
 using namespace std;
 
-template<typename IterT,typename Func>// Å¸ÀÔ¸Å°³º¯¼öÀÇ Æ÷ÀÎÅÍ´Â ¹»±î
+template<typename IterT,typename Func>// íƒ€ì…ë§¤ê°œë³€ìˆ˜ì˜ í¬ì¸í„°ëŠ” ë­˜ê¹Œ
 void For_each(IterT begin, IterT end, Func pf)
 {
 	while(begin != end)
@@ -184,7 +184,7 @@ void For_each(IterT begin, IterT end, Func pf)
 template<typename T>
 struct PrintFunctor
 {
-	string sep;//Ãâ·Â ±¸ºĞÀÚ Á¤º¸
+	string sep;//ì¶œë ¥ êµ¬ë¶„ì ì •ë³´
 	
 	explicit PrintFunctor(const string& s=" "):sep(s){}
 	
@@ -202,8 +202,8 @@ int main()
 }
 */
 
-//¿¹Á¦ ¹®Á¦
-//1¹ø
+//ì˜ˆì œ ë¬¸ì œ
+//1ë²ˆ
 /*
 #include<iostream>
 
@@ -238,7 +238,7 @@ int main()
 	cout<<endl;
 }
 */
-//2¹ø stack
+//2ë²ˆ stack
 /*
 #include<iostream>
 
@@ -273,7 +273,7 @@ class Stack
 
 int main()
 {
-	Stack<int> st;//()ÀÇ Â÷ÀÌ°¡ ¹¹¾ß?
+	Stack<int> st;//()ì˜ ì°¨ì´ê°€ ë­ì•¼?
 	
 	st.Push(10);
 	
@@ -281,7 +281,7 @@ int main()
 		cout<<st.Pop()<<endl;
 }
 */
-//3¹ø
+//3ë²ˆ
 #include<iostream>
 
 using namespace std;
@@ -316,7 +316,7 @@ class Queue
 
 int main()
 {
-	Queue<int> st;//()ÀÇ Â÷ÀÌ°¡ ¹¹¾ß?
+	Queue<int> st;//()ì˜ ì°¨ì´ê°€ ë­ì•¼?
 	
 	st.Push(10);
 	st.Push(20);
