@@ -1,0 +1,37 @@
+#include<iostream>
+#include<deque>
+using namespace std;
+
+int main()
+{
+	//deque가 vector와 다른 점은 메모리 블록 할당 정책 입니다.
+	//deque은 vector가 하나의 메모리 블록을 쓰는것과는 다르게 여러 개의 메모리 블록을 할당하고
+	//사용자에게는 하나의 블록처럼 보이게 하는 정책을 사용합니다.
+	//이 차이점 덕분에 deque는 원소를 앞으로도 넣을 수 있습니다.
+	
+	//insert할때 iter가 가르키는 위치보다 삽입될 원소가 앞쪽에 삽입됩니다. 이는 vector와 동일한데 
+	//차이점은 vector 보다 효율적으로 동작 한다는 것입니다.
+	//할당된 크기가 작으면 vector의 경우는 새로운 블록을 할당하여 복사와 삭제동작을 하는 반면
+	//deque는 메모리 블록을 하나 더 할당하여 넣으면 되기 때문입니다.
+	cout<<endl;
+	deque<int> dq;
+	
+	for(int i=0; i<10; ++i)
+		dq.push_back((i+1)*10);
+	
+	deque<int>::iterator iter;
+	deque<int>::iterator iter2;
+	for(iter = dq.begin(); iter != dq.end(); ++iter)
+		cout<<*iter<<' ';
+	cout<<endl;
+	
+	iter = dq.begin()+2;//삽입할 위치를 가르키는 반복자
+	iter2 = dq.insert(iter, 500);//삽입되는 원소를 가르키는 반복자
+	cout<< *iter<< endl;
+	
+	for(iter = dq.begin(); iter != dq.end();++iter)
+		cout<< *iter<<" ";
+	cout<<endl;
+	
+	return 0;
+}
