@@ -1,0 +1,61 @@
+#include<iostream>
+#include<map>
+
+using namespace std;
+
+int main()
+{
+	//map은 원소를 key와 value의 쌍으로 저장합니다.
+	//key는 중복 저장 될 수 없으며 중복저장하기 위해서는 multimap을 사용해야 합니다.
+	
+	//map은 []연산자를 사용하여 key에 해당하는 원소의 value에 쉽게 접근하거나 저장할 수 있습니다.
+	
+	map<int,int> m;
+	pair<map<int,int>::iterator,bool> pr;//insert의 반환값
+	
+	m.insert(pair<int,int>(5,100));
+	m.insert(pair<int,int>(3,100));
+	m.insert(pair<int,int>(8,30));
+	m.insert(pair<int,int>(4,40));
+	m.insert(pair<int,int>(1,70));
+	m.insert(pair<int,int>(7,100));
+	
+	pr = m.insert(pair<int,int>(9,50));
+	pr.first;//-> insert 성공시 삽입한 원소의 반복자가 들어간다.
+	pr.second;// -> insert의 성공 여부가 저장된다.
+	
+	m[5] = 50;// key값이 5인 원소의 value값을 수정한다. 만약 key값이 5인 원소가 없다면 원소를 추가한다.
+	cout<<endl;
+	for(pair<int,int> a: m)
+		cout<<"("<<a.first<<", "<<a.second<<")"<<" ";
+	cout<<endl;
+	
+	map<int,int, greater<int>> m1;// map컨테이너의 기본 정렬 기준은 less입니다 정렬기준을 바꾸려면 세번제 인자를 사용하여 바꿀 수 있습니다.
+	
+	//find, upper, lower, equal
+	
+	map<int,int>::iterator iter;
+	
+	iter = m.find(5);// 5key값에 매핑된 value값 50을 찾아 온다.
+	
+	map<int,int>::iterator lower_iter;
+	map<int,int>::iterator upper_iter;
+	
+	lower_iter = m.lower_bound(5);//시작 -> set과 똑같음
+	upper_iter = m.upper_bound(5);//다음원소
+	
+	cout<<upper_iter->first<<endl;
+	
+	pair<map<int,int>::iterator, map<int,int>::iterator> iter_pair;
+	iter_pair = m.equal_range(5);//구간의 순차열을 구한다. 한마디로 중복된 키 값을 구하는 듯하다.
+	
+	//중복키를 허용하는 multimap은 []연산자를 허용하지 않습니다.
+	
+	multimap<int,int> mm;
+	
+	multimap<int,int>::iterator mm_iter;
+	
+	mm_iter = mm.find(3);// 3의 key값을 찾는다 이때 3이 중복되어 있다면 첫 번째값을 반환해주고 없다면 end()반복자를 반환한다.
+	mm.count(3)//3의 갯수를 출력
+	return 0;
+}
