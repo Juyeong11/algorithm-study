@@ -1,0 +1,105 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+bool Pred_transposition(int a, int b)
+{
+	return abs(b-a) > 10;
+}
+bool Pred_Unary(int a)
+{
+	return 25<a;
+}
+
+void Print(int n)
+{
+	cout<<n<<", ";
+}
+int main()
+{
+	vector<int> v;
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(50);
+	v.push_back(90);
+	
+	vector<int>::iterator iter;
+	vector<int>::iterator iter_b = v.begin();
+	vector<int>::iterator iter_e = v.begin() + 4;
+	//********************
+	iter = adjacent_find(iter_b, iter_e);// 주어진 구간 내에서 서로 같은 원소를 찾아 첫번째 원소를 반환한다.
+	//여기서 원소를 찾지 못하면 찾는 구간의 끝 반복자를 반환해준다.
+	
+	cout<< endl;
+	if(iter != iter_e)
+		cout<< *iter << endl;
+	cout<< endl;
+	
+	iter = adjacent_find(v.begin(), v.end(), Pred_transposition);// 인접원소가 조건에 맞으면 첫 원소를 반환해 준다.
+	if(iter != v.end())
+		cout<< *iter << endl;
+	cout<< endl;
+	//********************
+	int n = count(v.begin(),v.end(),30);//해당 원소의 갯수를 구한다.
+	n = count_if(v.begin(), v.end(), Pred_Unary);// 해당 조건에 맞는 원소의 갯수를 구한다.
+	
+	vector<int> v1;
+	
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(20);
+	v1.push_back(30);
+	v1.push_back(50);
+	v1.push_back(90);
+	//********************
+	if(equal(v.begin(), v.end(), v1.begin()))// v크기 만큼의 v1순차열을 가져와 비교 한다.
+		cout<<"같다"<<endl;
+	if(equal(v.begin(), v.end(), v1.begin(), Pred_transposition))// 조건에 따라 두 순차열이 같은지 비교한다.
+		cout<<"같다"<<endl;
+	//********************
+	iter = find(v.begin(), v.end(), 20);//원소 값이 20인 첫 원소의 반복자이다.
+	
+	iter = find_if(v.begin(), v.end(), Pred_Unary);//원소 값이 조건에 맞는 첫원소의 반복자이다.
+	
+	iter = find_end(v.begin(),v.end(),v1.begin(),v1.end());//v의 순차열에 구간 v2의 순차열이 일치하는 지 판단하여 일치하는 순차열 구간이 여러개 라면 마지막 순차열의 첫 원소 반복자를 반환합니다.
+	
+	iter = find_end(v.begin(),v.end(),v1.begin(),v1.end(), Pred_transposition);//조건자 버전
+	
+	iter = find_first_of(v.begin(),v.end(),v1.begin(),v1.end());	// 해당 순차열을 비교하다 같은 원소가 나오면 그 원소의 반복자를 반환합니다.
+
+	iter = find_first_of(v.begin(),v.end(),v1.begin(),v1.end(),Pred_transposition);	//
+
+	//********************
+	for_each(v.begin(),v.end(),Print);//해당 구간의 모든 원소에 대해 Print를 적용합니다.
+	cout<<endl;
+	//함수자를 이용하여 다양한 출력 패턴을 적용할 수 있다.
+	//********************
+	bool a = lexicographical_compare(v.begin(),v.end(),v1.begin(),v1.end());//순차열을 사전순으로 비교해줍니다.
+	
+	a = lexicographical_compare(v.begin(),v.end(),v1.begin(),v1.end(),less<int>());//조건자 이항 연산자이다.
+	//********************
+	//max, min은 잘알아ㅓ 생략
+	iter = max_element(v.begin(),v.end());//주어진 구간에거 가장 큰 원소의 반복자를 반환
+	iter = min_element(v.begin(),v.end());//주어진 구간에거 가장 작은 원소의 반복자를 반환
+	
+	//이항연산자를 조건자로 사용가능
+	//********************
+	pair<vector<int>::iterator, vector<int>::iterator> iter_pair;
+	iter_pair = mismatch(v1.begin(),v1.end(),v.end());// 해당 구간의 순차열을 비교하다 서로 다른 부분이 나오면 pair를 반환한다.
+	iter_pair = mismatch(v1.begin(),v1.end(),v.end(),Pred_transposition);//조건ㅇ 안맞는 부분을 pair로 반환
+
+	//********************
+	//find_end()는 마지막 순차열의 반복자를 반환하지만, search()는 첫 번째 순차열의 반복자를 반환합니다.
+	iter = search(v.begin(),v.end(),v1.begin(),v1.end());//일치하는 순차열의 첫번째 원소의 반복자를 반환한다.
+	
+	iter = search_n(v.begin(),v.end(),3,30);//30이 3번 이상 연속한 위치를 찾는다.
+	
+	iter = search_n(v.begin(),v.end(),3,30,Pred_transposition);//30이 3번 이상 조건과 맞는 부분의 위치를 찾는다..
+
+	//********************
+	return 0;
+}
