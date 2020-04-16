@@ -1,0 +1,48 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+
+int main()
+{
+	vector<int> v;
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(50);
+	v.push_back(60);
+	
+	
+	make_heap(v.begin(),v.end());//해당구간의 순차열을 힙 구조로 만들어 냅니다.
+	
+	
+	
+	v.push_back(35);
+	push_heap(v.begin(),v.end());//push_back()로 원소를 넣고 push_heap으로 형태를 유지해준다. make_heap으로 정렬을 해주지 않고 사용하면 이상하게 정렬이 된다.
+	
+	pop_heap(v.begin(), v.end());//가장 큰 원소를 맨 마지막으로 보내고 나머지 원소는 힙의 형태를 유지해준다.
+	
+	sort_heap(v.begin(),v.end());//오름차순으로 정렬해준다. 모든 정렬 조건은 조건자를 이용해 변경 가능하다.
+	for(int a:v)
+		cout<<a<<" ";
+	cout<<endl;
+	
+	vector<int> va;
+	
+	for(int i=0;i<100;++i)
+		va.push_back(rand()%1000);
+	
+	nth_element(va.begin(), va.begin() + 20, va.end(),greater<int>()); // 인자를 순서대로 abc라고 할때 b-a만큼의 원소를 사전순으로 선별하여 [b,m)에 놓게 합니다.
+	
+	for(int i=0;i<20;++i)
+		cout<<va[i]<<" ";
+	cout<<endl;
+	//기본 sort는 생략할께요
+	
+	stable_sort(va.begin(),va.end());//같은 정렬기준의 원소들끼리 정렬해야 될떼 상대적인 순서를 유지해준다.
+	
+	partial_sort(va.begin(),va.begin()+20,va.end());//nth_element와 같이 조건에 맞는 원소 상위 20개를 뽑아준다 그리고 정렬해준다. 다른 순차열에 복사해주는 partial_sort_copy도 있다.
+	
+}
