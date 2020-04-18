@@ -1,0 +1,87 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+bool Pred(int left,int right)
+{
+	return 3 < right-left;
+}
+int main()
+{
+	//정렬된 범위 알고리즘은 정렬된 구간에서만 동작하는 알고리즘이다. 
+	//또한 원소가 같은을 비교할 때 연관 컨테이너처럼 두 원소 a, b에 대해 !(a<b) && !(b<a)연산equivalence를 사용합니다.
+	vector<int> v;
+	v.push_back(5);
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(30);
+	v.push_back(30);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(50);
+	v.push_back(60);
+	
+	if(binary_search(v.begin(),v.end(),20))//이진 검색 알고리즘
+		cout<<"20"<<endl;
+	
+	//binary_search(v.begin(),v.end(),32,Pred) // 비교 연산의 조건이 3차이가 나면 같은 것으로 간주함으로 32가 없어도 있다고 결과가 나온다.
+	//sort에 이 조건자를 사용해도 마찬가지이다.
+	//정렬된 범위 알고리즘은 정렬된 순차열에서 동작하므로 모든 알고리즘이 조건자 버전의 알고리즘의 제공되며 정렬 기준과 동일한 조건자를 지정해야 알고리즘이 올바르게 동작합니다.
+	
+	vector<int> v1;
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(30);
+	v1.push_back(40);
+	v1.push_back(50);
+	
+	vector<int> v2;
+	v2.push_back(10);
+	v2.push_back(20);
+	v2.push_back(30);
+	v2.push_back(40);
+	v2.push_back(50);
+	
+	vector<int> v3;
+	v3.push_back(10);
+	v3.push_back(20);
+	v3.push_back(30);
+	v3.push_back(40);
+	v3.push_back(50);
+	
+	if(includes(v1.begin(),v1.end(),v2.begin(),v2.end()))//한 순차열이 다른 순차열의 부분 집합인지 판단하려면 이 알고리즘을 사용하자.
+		cout<<"v2는 v1의 부분 집합"<<endl;
+	//기본 정렬기준은 less이며 만약 바꿔야 한다면 비교 기준을 설정해야 한다.
+	
+	//연관 컨테이너에 있는 멤버함수 upper_bound()와 lower_bound()는 알고리즘에도 있다.
+	
+	vector<int>::iterator iter_lower, iter_upper;
+	
+	iter_lower = lower_bound(v.begin(), v.end(), 30);
+	iter_upper = upper_bound(v.begin(), v.end(), 30);//반환값은 멤버함수와 동일하다.
+	
+	pair<vector<int>::iterator, vector<int>::iterator> iter_pair;
+	
+	iter_pair = equal_range(v.begin(), v.end(), 30);//앞의 멤버 함수와 동일
+	
+	for(vector<int>::iterator iter=iter_pair.first; iter != iter_pair.second; ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	
+	vector<int>::iterator iter_end;
+
+	iter_end = merge(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+	//v1과v2를 합쳐서 v3에 넣는다.
+	
+	inplace_merge(v.begin(), v.begin() + 5,v.end());//하나의 순차열이 두구간으로 정렬되어 있다면 하나의구간으로 정렬해준다.
+	
+	iter_end = set_union(v1.begin(),v1.end(),v2.begin(),v2.end(),v3.begin());//v1과 v2의 합집합을 v3와 합집합하여 저장
+	//[v3.begin() iter_end)
+	iter_end = set_intersection(v1.begin(),v1.end(),v2.begin(),v2.end(),v3.begin());//교집합
+	
+	iter_end = set_difference(v1.begin(),v1.end(),v2.begin(),v2.end(),v3.begin());//차집합
+	
+	iter_end = set_symmetric_difference(v1.begin(),v1.end(),v2.begin(),v2.end(),v3.begin());//대칭차집합
+}
