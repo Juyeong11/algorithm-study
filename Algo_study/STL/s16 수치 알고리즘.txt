@@ -1,0 +1,101 @@
+#include<iostream>
+#include<vector>
+#include<numeric>
+using namespace std;
+
+template<typename T>
+struct Plus
+{
+	T operator()(const T& left, const T& right)
+	{
+		return left+right;
+	}
+};
+
+int g_Plus(int left, int right)
+{
+	return left+right;
+}
+
+int g_Minus(int left, int right)
+{
+	return left-right;
+}
+int main()
+{
+	//수치 관련 원소를 다룬다.<numeri>헤더에 저장
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+	
+	cout<<accumulate(v.begin(), v.end(), 0)<<endl;//(마지막 인자)+10+20+30+40+50의 합을 반환해준다.
+	
+	cout<<accumulate(v.begin(), v.end(), 0, Plus<int>())<<endl;//사용자 함수의 연산을 수행한다.
+	
+	cout<<accumulate(v.begin(), v.end(), 1, multiplies<int>())<<endl;
+	/*내부 동작
+	for(iter first -> last)
+		ret = fun(ret, *p);
+	*/
+	vector<int> v1;
+	v1.push_back(2);
+	v1.push_back(2);
+	v1.push_back(2);
+	v1.push_back(2);
+	v1.push_back(2);
+		
+	cout<< inner_product(v.begin(),v.end(),v1.begin(),0)<<endl;//0+1*2+2*2+3*2+4*2+5*2
+	//두 순차열의 내적(모든 원소의 곲의 합)을 구하려면 inner_product
+	
+	cout<< inner_product(v.begin(),v.end(),v1.begin(),0,g_Plus,g_Minus)<<endl;//0 + 1-2 + 2-2 + 3-2 + 4-2 + 5-3
+	/* 함수 내부 동작
+	Type inner_product(Iter first, Iter last, Iter first2, Type x, Func1 func1, Func2 func2)
+		Type ret = x;
+		for(Iter p = first; q=fist2; p != last; ++p, ++q)
+			ret = fun1(ret, fun2(*p,*q));
+		return ret;
+	*/
+	
+	vector<int>::iterator iter_end;
+	iter_end = adjacent_difference(v.begin(), v.end(), v1.begin());//v순차열의 인접원소의 차를 v1에 저장한다.
+	
+	for(vector<int>::iterator iter = v1.begin(); iter != iter_end; ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	
+	iter_end = adjacent_difference(v.begin(), v.end(), v1.begin(),g_Plus);//사용자 정의함수 버전 인접원소의 합을 구한다.
+	
+	for(vector<int>::iterator iter = v1.begin(); iter != iter_end; ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	/* 함수 내부 동작
+	Type adjacent_difference(Iter first, Iter last, Iter target,Func func)
+		*target++ = *first;
+		for(Iter p = first + 1; p != last; ++p)
+			*target++ = fun(*p, *(p-1));
+		return target;
+	*/
+	
+	iter_end = partial_sum(v.begin(), v.end(), v1.begin());//v순차열에서 현재 원소까지의 합을 v1에 저장한다.
+	
+	for(vector<int>::iterator iter = v1.begin(); iter != iter_end; ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	
+	iter_end = partial_sum(v.begin(), v.end(), v1.begin(), g_Minus);//현재 원소 까지 사용자 정의 연산을 수행한다
+	
+	for(vector<int>::iterator iter = v1.begin(); iter != iter_end; ++iter)
+		cout<<*iter<<" ";
+	cout<<endl;
+	
+	/* 함수 내부 동작
+	Type adjacent_difference(Iter first, Iter last, Iter target,Func func)
+		Type val = *target++ = *first;
+		for(Iter p = first + 1; p != last; ++p)
+			*target++ = val = fun(val, *p);
+		return target;
+	*/
+}
