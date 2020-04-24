@@ -1,0 +1,103 @@
+#include<iostream>
+#include<functional>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+//-------------------------------------------------
+struct LessFunctor //함수 객체 조건 연산자
+{
+	bool operator()(int left, int right) const
+	{
+		return left < right;
+	}
+};
+
+bool LessFun(int left, int right)// 함수 조건자
+{
+	return left < right;
+}
+//-------------------------------------------------
+
+//-------------------------------------------------
+template<typename T>
+struct Plus
+{
+	//사용자 정의 함수는 어댑터를 사용하기 위해 요구사항을 지켜야 한다.
+	//1. 단항 함수 객체는 반드시 argument_type, result_type이 정의돼 있어야 합니다. 각각은 함수의 인자 형식과 리턴 형식입니다.
+	//2. 이항 함수 객체는 반드시 first_argument_type, second_argument_type, result_type이 정의돼 있어야 합니다. 각각은 함수의 첫 번째 인자 형식과 두 번째 인자 형식, 리턴 형식입니다.
+	
+	//이게 없으면 어댑터를 사용할 수 없다. 원리는>? 아직 모르겠다.
+	typedef T first_argument_type;
+	typedef T second_argument_type;
+	typedef T result_type;
+	
+	T operator()(const T& left, const T& right) const
+	{
+		return left + right;
+	}
+};
+//-------------------------------------------------
+
+template<typename T>
+struct Plus1:public binary_function<T,T,T>
+{
+	
+	T operator()(const T& left, const T& right) const
+	{
+		return left + right;
+	}
+};
+int main()
+{
+	
+	//1.
+	bool (*LessPtr)(int, int) = LessFun;
+	LessFunctor lessFunctor;
+	
+	//- 함수 객체로 10과 20을 비교
+	cout<< lessFunctor(10, 20)<<endl;
+	
+	//- 함수로 10과 20을 비교
+	cout<< LessFun(10,20)<<endl;
+	
+	//- 함수 포인터로 10과 20을 비교
+	cout<< LessPtr(10, 20)<<endl;
+	
+	
+	//STL에서 제공하는 조건자는 내부 상태가 변경되지 않는 bool형식을 반환하는 함수 객체 입니다.
+	
+	
+	vector<int> v1;
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(30);
+	
+	vector<int> v3(3);
+	
+	//2.
+	//stl버전
+	//transform(v1.begin(), v1.end(), v3.begin(), binder1st<plus<int>>(plus<int>(), 100));
+	
+	
+	//각각의 인자를 더 해주는 함수를 어댑터를 이용하여 한 쪽의 인자를 100으로 고정해준다.
+	//이렇게 함수의 일부를 번형시켜주는 것을 어댑터라 한다.
+	
+	//사용자 정의
+	transform(v1.begin(), v1.end(), v3.begin(), binder1st<Plus<int>>(Plus<int>(), 100));
+	
+	for(int a: v3)
+		cout<<a<<" ";
+	cout<<endl;
+	
+	
+	//3.
+	//상속을 해주면 인자를 추가할 필요 없고 더 간단하며 일반적이다.
+	transform(v1.begin(), v1.end(), v3.begin(), binder1st<Plus1<int>>(Plus1<int>(), 100));
+
+	for(int a: v3)
+		cout<<a<<" ";
+	cout<<endl;
+	return 0;
+}
