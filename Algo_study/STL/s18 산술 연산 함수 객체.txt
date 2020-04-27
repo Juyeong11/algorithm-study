@@ -1,0 +1,64 @@
+#include<iostream>
+#include<functional>
+#include<vector>
+#include<algorithm>
+#include<numeric>
+using namespace std;
+
+template<typename T>
+struct Plus: public binary_function<T,T,T>
+{
+	T operator()(const T& left, const T& right) const
+	{
+		return left + right;
+	}
+};
+int main()
+{
+	//plus<T>     : 이항 연산 함수자로 +연산
+	//minus<T>    : 	"	-연산
+	//muliplies<T>:		"	*연산
+	//divides<T>  :		"	/연산
+	//modulus<T>  :		"	%연산
+	//negate<T>   :	단항 연산 함수자로 - 연산
+	plus<int> oPlus;
+	//1. oPlus 객체로 10, 20 더하기. 암묵적 호출
+	cout<< oPlus(10,20)<<endl;
+	//2. 명시적 호출
+	cout<< oPlus.operator()(10,20)<<endl;
+	
+	//3. 임시 객체로 암묵적 호출
+	cout<< plus<int>()(10,20)<<endl;
+	
+	//사용자 구현
+	cout<<Plus<int>()(10,20)<<endl;
+	
+	//사용법
+	
+	vector<int> v1;
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(30);
+	v1.push_back(40);
+	v1.push_back(50);
+	
+	vector<int> v2;
+	v2.push_back(1);
+	v2.push_back(2);
+	v2.push_back(3);
+	v2.push_back(4);
+	v2.push_back(5);
+	
+	vector<int> v3(5);
+	transform(v1.begin(), v1.end(), v2.begin(), v3.begin(), plus<int>());
+	cout<<"v3(v1 + v2) : ";
+	for(int a: v3)
+		cout<<a<<" ";
+	cout<<endl;
+	
+	adjacent_difference(v1.begin(), v1.end(), v3.begin(), minus<int>());
+	
+	for(int a: v3)
+		cout<<a<<" ";
+	cout<<endl;
+}
