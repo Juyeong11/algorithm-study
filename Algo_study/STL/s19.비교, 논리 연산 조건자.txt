@@ -1,0 +1,53 @@
+#include<iostream>
+#include<functional>
+#include<vector>
+#include<algorithm>
+#include<numeric>
+using namespace std;
+
+template<typename T>
+struct Less: public binary_function<T, T, bool>
+{
+	bool operator()(const T& left, const T& right) const
+	{
+		return left< right;
+	}
+};
+
+int main()
+{
+	// 비교 연산 조건자
+	// 이항 조건자
+	// equal_to<T> : ==연산
+	// not_equal_to<T> : != 연산
+	// less<T> : <연산
+	// less_equal<T> : <=연산
+	// greater<T>
+	// greater_equal<T>
+	
+
+	less<int> oLess;
+	cout<<oLess(10, 20)<<endl;
+	
+	Less<int> oless;
+	cout<<oless(10,20)<<endl;
+	
+	vector<int> v;
+	
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(50);
+	
+	cout<<"20>  : " <<count_if(v.begin(),v.end(), bind2nd<less<int>>(less<int>(),30))<<endl;//이렇게 써요
+	
+	//논리 연산 조건자
+	//logical_and<T> : &&
+	//logical_or<T>  : ||
+	//logical_not<T> : !
+	
+	int n = 30;
+	logical_and<bool> oAnd;
+	cout<<oAnd(greater<int>()(n,10), less<int>()(n, 50))<<endl;//10<n<50인가?
+}
