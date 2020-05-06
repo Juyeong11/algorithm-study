@@ -1,0 +1,58 @@
+#include<iostream>
+#include<list>
+
+using namespace std;
+
+int n = 6;
+int k = 3;
+
+
+int main()
+{
+	list<int> josep;
+	for(int i=0;i<n;i++)
+		josep.push_back(i+1);
+	
+	list<int>::iterator iter = josep.begin();
+	int count = k;
+	cout<<josep.size()<<endl;
+	while(josep.size() != 2)
+	{
+		if(iter == josep.end())
+			iter = josep.begin();
+		if(count == k)
+		{
+			iter = josep.erase(iter);
+			count = 1;
+		}
+		++count;
+		++iter;
+		for(int a: josep)
+		cout<<a<<" ";
+		cout<<endl;
+	}
+	cout<<endl;
+	
+}
+
+void josephus(int n, int k)
+{
+	list<int> survivors;
+	for(int i = 1; i <= n; ++i) survivors.push_back(i);
+	
+	list<int>::iterator kill = survivors.begin();
+	
+	while( n > 2)
+	{
+		kill = survivors.erase(kill);
+		if(kill == survivors.end()) kill = survivors.begin();
+		--n;
+		for(int i = 0; i< k-1;++i)
+		{
+			++kill;
+			if(kill==survivors.end()) kill = survivors.begin();
+		}
+	}
+	
+	cout<<survivors.front()<<" "<< survivors.back()<<endl;
+}
