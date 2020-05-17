@@ -1,0 +1,83 @@
+문자열
+
+문자열에서 어떤 다른 부분 문자열을 찾는 문제를 문자열 검색 문제라 합니다.
+
+문자열 검색의 대표적인 알고리즘은 KMP알고리즘을 알아보겠습니다.
+
+ KMP알고리즘은 접두사와 접미사를 이용해 비교하던 문자열이 일치 하지 않았을 때 시작할 다음위치를 빠르게 정하게 해줍니다.
+문자열 N 'aabaabac'과 문자열 H '....aabaaba...' 가 있다고 할 때 
+  
+       1234567
+N =    aabaabac
+H = ...aabaaba...  이렇게 비교 됬다고 하자 여기서 비교가 실패 했으므로 다음 위치부터 비교를 해야 한다.
+하지만 바로 다음 위치로 가면 일치 하지 않음을 알 수 있다. 비교가 가능한 위치로 가려면 4번 위치와 7번 위치가 있는데
+이 위치를 구하기 위해서 접두사와 접미사를 사용한다.
+        1234567
+N       a a b|a a b a| c
+H    ...a a b a a b a...               
+N3           |a a b a|a b a c
+N6                 |a| a b a a b a c
+
+여기서 N3의 접두사와 N의 접미사가 같은것을 볼 수 있다.
+N을 k번 이동해서 비교가 가능한 위치로 가려면 (접두사의 길이 - 1)만큼 앞으로 가주면 된다.
+
+그 후 다시 변경된 시작위치부터 비교를 시작할 때 우리는 이미 (접두사의 길이) 만큼은 같다는 것을 
+알고 있으니 그 다음 위치부터 비교를 시작하면된다.
+
+vector<int> kmpSearch(const string& H, const string& N)
+{
+	int n = H.size(), m = N.size();
+	
+	vector<int> ret;
+	
+	vector<int> pi = getPartiaMatch(N);//pi[i]=N[..i]접두사와 접미사가 같아지는 문자열의 최대 길이
+	int begin = 0;  // 문자열 비교 시작 위치 
+	int matched = 0;// 문자열의 일치된 길이
+	while(begin <= n - m)
+	{
+		if(matched < m && H[begin + matched] == N[matched])//해당 위치의 글자가 같다면
+		{
+			++matched;//문자열의 일치된 길이를 늘려주고
+			if(matched == m) ret.push_back(begin);
+		}
+		else//다르다면
+		{
+			if(matched == 0) ++begin;//일치된것이 없으면 시작 위치를 옮겨 준다.
+			else//일치 된것이 있다면
+			{
+				begin += matched - pi[matched-1];//시작위치에서 접두사의 길이 만큼을 빼주고 시작한다.
+				matched = pi[matched-1];//접두사만큼 일치됨 - 길이를 접두사의 길이로 바꿔준다.
+			}
+		}
+	}
+	return ret;
+}
+
+getPartiaMatch 이것을 구현할 때도 KMP알고리즘을 써서 시간 복잡도를 더 짧게 구현할 수 있다.
+
+vector<int> getPartialMatch(const string& N)
+{
+	m = N.size();
+	
+	vector<int> pi(m,0);
+	int begin = 1;  
+	int matched = 0;
+	while(begin + matched < m)
+	{
+		if(N[begin + matched] == N[matched])
+		{
+			++matched;
+			pi[begin+matched-1] = matched;
+		}
+		else//다르다면
+		{
+			if(matched == 0) ++begin;
+			else
+			{
+				begin += matched - pi[matched-1];
+				matched = pi[matched-1];
+			}
+		}
+	}
+	return pi;
+}
