@@ -1,0 +1,150 @@
+비트마스크-> 정수의 이진수 표현을 자료구조로 쓴다.
+	
+	- 더 빠른 수행시간
+	- 더 간결한 코드
+	- 더 작은 메모리 사용량
+	- 연관 배열을 배열로 대체
+
+a|b, a&b, a^b(xor), ~a, a<<b, a>>b
+
+사용시 유의할 점
+
+	- 연산자 우선순위
+	- 1<<b를 할 때 만약 b가 64비트 정수형이라면 1뒤에 상수가 부호없는 64비트
+	  정수임을 알려주는 접미사 UI를 붙여줘야한다.
+	- 부호있는 정수형을 사용할 때 최상위 비트는 부호를 표현하기 때문에 
+	  모든 비트를 사용하면 오류가 발생할 수 있다.
+	- c++에서 N비트 정수를 N비트이상 왼쪽으로 시프트할 경우 C++언어 명세에
+	  정의되어 있지 않으므로 이런 코드는 환경에 따라 다른 결과를 낼 수도 있다.
+
+
+비트 마스크를 이용한 집합 구현
+	
+	N비트 정수 변수는 0부터 n-1까지의 정수 원소를 가질 수 있는 집합이 됩니다.
+	ex){1,4,5,6,7,9} -> 2^1+2^4+2^5+2^6+2^7+2^9 = 754
+
+이렇게 만든 집합을 조작하는 방법
+
+공집합과 꽉 찬 집합 구하기
+
+	0 -> 공집합
+	1<<20 - 1  -> 원소가 20개인 집합이 꽉 차있을 때 1111 1111 1111 1111 1111
+
+원소 추가
+
+	topping |= (1<<p)
+	p번 비트만 켜진 상태에서 or연산을 한다.
+
+원소의 포함 여부 확인
+
+	topping & (1<<p) 반환값은 0또는 1<<p인걸 유의하자
+
+원소의 삭제
+
+	topping &= ~(1<<p)
+	NOT연산후 AND 연산
+
+원소의 토글
+
+	해당 비트가 켜져있으면 크고, 꺼져 있으면 켜는 것이다
+	toppings ^= (1<<p)
+	p번 비트와의 XOR연산이므로 당연한 결과겠죠?
+
+두 집합에 대해 연산하기
+
+	a|b -> 합집합
+	a&b -> 교집합
+	a & ~b -> a에서 b를 뺀 차집합
+	a ^ b  -> a와 b중 하나에만 포함된 원소들의 집합
+
+집합의 크기 구하기
+
+	c++ __popcnt(toppings)
+	gcc/g++ __builtin_popcount(toppings)
+	java	integer.bitCount(toppings)
+	각 비트를 순회하면서 켜져 잇는 비트의 수를 직접 샐 수 도 있지만
+	잘 최적화되어 있는 함수를 사용하자
+
+최소 원소 찾기
+
+	최하위 비트를 찾는 함수
+	c++ _BitcanForward(&index, topoings)
+	gcc/g++ __builtin_ctz(toppings)
+	java	integer.numberOfTrailingZeros(toppings)
+	
+	함수들도 있지만 보수를 이용해서 구하는 방법도 있다.
+	firstToppoing = (toppings & -toppings);
+
+최초 원소 지우기
+
+	toppings &= (toppings - 1)
+
+모든 부분 집합 순회하기
+
+	for(int subset = pizza; subset; subset = ((subset-1) & pizza))
+	공집합 제외 모든 부분집합을 방문한다.
+
+시프트 연산으로 2의n승 수에 대한 나눗셈과 곱셈을 구할 수 있고
+AND연산으로 나머지를 구할 수 있다.
+
+
+64비트 정수형 자료형으로 4*4배열 표현하기
+typedef unsigned long long uint64;
+
+int get(uint64 mask, int index)
+{
+	 return (mask >> (index << 2)) & 15;
+}
+
+uint64 set(uint64 mask, int index, uint64 value)
+{
+	return mask & ~(15LL << (index << 2)) | (value << (index << 2));
+}
+
+O(1) 우선순위 큐
+
+	우선순위위가 특정 범위로 제한되어 있을 경우 비트마스크를 이용하면
+	모든 작업을 O(1)에 할 수 있는 우선순위 큐를 만들 수 있습니다.
+
+	우선순위가 1~140이하의 정수 일 때 원소를 담는 140개의 큐를 만들고
+	큐에 원소가 있는지를 비트마스크로 표현한다.
+	140개의 불 값을 64비트 정수 세개에 저장하면 첫 번째 비트를 찾는 연산을 이용해
+	모든 큐를 찾을 필요 없이 가장 우선순위가 높은 원소가 어디에 있는지를
+ 	쉽게 찾을 수 있다.
+
+극대 안정 집합
+
+	물질의 집합이 있을 때, 어느 물질을 하나라도 추가하면 폭발이 일어나는 집합들을
+	극대 안정 집합이라고 부릅니다.
+
+
+int n;
+
+int explodes[MAXN]; // i와 같이 두었을 때 폭발하는 물질을 집합 비트마스크 표현
+
+bool isStabla(int set)
+{
+	for(int i = 0; i < n; ++i)
+		if((set & (1<<i)) && (set & explodes[i]))//집합에 포함된 i번째 원소와 같이 두었을 때 폭발하는 물질이 set에 있다면
+			return false;
+	return true;
+}
+
+int countStableSet()
+{
+	int ret = 0;
+	for(int set = 1; set < (1<<n); ++set)
+	{
+		if(!isStable(set)) continue;
+		bool canExtend = false;
+		for(int add = 0; add < n; ++add)
+			//집합에 포함 안되있고 set에 넣어도 안정적이라면
+			if((set & (1 << add)) == 0 && (explodes[add] & set) == 0){
+				canExtend = true;
+				break;
+			}
+		if(!canExtend)
+			++ret;
+	}
+	return ret;
+}
