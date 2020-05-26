@@ -1,0 +1,70 @@
+
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+vector<int> getPartialMatch(const string& N);
+int maxOverlap(string& a, string& b);
+int main()
+{
+	string a("nnonoo");//기존 문자열
+	string b("oononn");//뒤집힌 문자열
+	
+	cout<<maxOverlap(a,b)<<endl;
+}
+
+int maxOverlap(string& a, string& b)
+{
+	int m = a.size();
+	vector<int> pi = getPartialMatch(b);
+	
+	int begin = 0;
+	int matched = 0;
+	while(begin < m)
+	{
+		if(a[begin + matched] == b[matched])
+		{
+			matched++;
+			if(matched == m - begin)
+				return matched;//팰린드롬을 만드는 문자열의 최대 길이 nnonoononn
+		}
+		else
+		{
+			if(matched == 0)
+				begin++;
+			else
+			{ 
+				begin += matched - pi[matched-1];//옮긴 후에도 pi[matched-1]만큼은 항상 일치한다.
+				matched = pi[matched-1];
+			}
+		}
+	}
+}
+
+vector<int> getPartialMatch(const string& N)
+{
+	int m = N.size();
+	
+	vector<int> pi(m,0);
+	int begin = 1;  
+	int matched = 0;
+	while(begin + matched < m)
+	{
+		if(N[begin + matched] == N[matched])
+		{
+			++matched;
+			pi[begin+matched-1] = matched;
+		}
+		else
+		{
+			if(matched == 0) ++begin;
+			else
+			{
+				begin += matched - pi[matched-1];
+				matched = pi[matched-1];
+			}
+		}
+	}
+	return pi;
+}
