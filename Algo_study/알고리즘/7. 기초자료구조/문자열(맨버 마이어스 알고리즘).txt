@@ -1,0 +1,66 @@
+환형 시프트 연산
+- 문자열의 마지막 글자가 시작부분으로 옮겨 가므로 환형 시프트 연산을 이용해 다이얼의 회전을 나타낼 수 있다.
+- 기존 문자열과 타겟 문자열을 비교 할 때 마다 비교하면 비용이 크다
+  그래서 기존 문자열을 두 번 이어 붙여 타겟 문자열과 비교해준다.
+
+시계방향으로 돌리기
+- 이 문제에서 한 번은 시계방향 다른 한번은 반 시계 방향으로 돌린다.
+  이때 마다 호출 하는 함수를 바꿔서 해결할 수 있겠지만
+  환형 시프트 연산을 해주는 함수의 매개 변수의 순서만 바꿔 주면 해결이 된다.
+  타겟 문자열에서 기존 문자열로 가는 것으로 하면 기존 문자열의 입장에서는 반시계 방향으로 돌아가는 것ㅇ기 때문
+
+접미사 배열 A[i]
+- 문자열을 다룰 때 빼놓을 수 없는 자료 구조이다.
+- 문자열 S의 모든 접미사를 사전순으로 정렬해둠
+- S[A[i]...] == i부터 시작하는 문자열
+
+- 단순히 정렬 알고리즘을 사용하여 접미사 배열을 만들 수 있으나 시간복잡도가 정렬O(nlog n) * 탐색O(n) 이정도 걸리기 때문에 다른 방법을 찾아야 한다.
+
+맨버-마이어스의 알고리즘
+- 문자열을 첫 한 글자, 첫 두번째글자, 첫 네 글자, 첫 여덟 글자... 이렇게 lgn번의 정렬의 하고나면 접미사 배열을 얻을 수 있다.
+struct Comparator{
+	const vector<int>& group;
+	int t;
+	Comparator(const vector<int>& _group, int _t): group(_group), t(_t){
+		group = _group; t = _t;
+	}
+	bool operator()(int a, int b)
+	{
+		if(group[a] != group[b])return group[a]<group[b];
+		return group[a + t] < group[b + t];
+	}
+};
+vector<int> getSuffixArray(const string& s)
+{
+	int n = s.size();
+	
+	int t = 1;
+	vector<int> group(n+1);
+	for(int i = 0; i <n; ++i) group[i] = s[i];
+	group[n] = -1;
+	
+	vector<int> perm(n);
+	for(int i=0; i<n; ++i) perm[i] = i;
+	while(t<n)
+	{
+		
+		Comparator compareUsing2T(group, t);
+		sort(perm.begin(), perm.end(), compareUsing2T);//문자열을 기준으로 perm을 정렬한다.
+		
+		t *= 2;
+		if(t>=n)break;
+		
+		vector<int> newGroup(n+1);//첫 2t글자를 기준으로 새로운 기준을 만들고 group으로 바꿈
+		newGroup[n] = -1;
+		newGroup[perm[0]] = 0;
+		for(int i = 1; i<n; ++i)
+		{
+			if(compareUsing2T(perm[i-1], perm[i]))// i-1 이 i 보다 작으면
+				newGroup[perm[i]] = newGroup[perm[i-1]]+1;
+			else// i-1 이 i 보다 크거나 같으면
+				newGroup[perm[i]] = newGroup[perm[i-1]];
+		}
+		group = newGroup;
+	}
+	return perm;
+}
