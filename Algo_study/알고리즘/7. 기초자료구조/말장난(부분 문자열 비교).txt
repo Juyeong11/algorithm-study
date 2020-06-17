@@ -1,0 +1,84 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+struct Comparator{
+	const vector<int>& group;
+	int t;
+	Comparator(const vector<int>& _group, int _t): group(_group), t(_t){
+		//group = _group; t = _t;
+	}
+	bool operator()(int a, int b)
+	{
+		if(group[a] != group[b])return group[a]<group[b];
+		return group[a + t] < group[b + t];
+	}
+};
+
+vector<int> getSuffixArray(const string& s);
+int commonPrefix(const string& s, int i, int j);
+int main()
+{
+	string s("uhmhellouhmmynameislibe");
+	vector<int> suffixArr = getSuffixArray(s);
+	int n = s.size();
+	int k =0;
+	for(int i=1;i<n;++i)
+	{
+		if(s[suffixArr[i]] == s[suffixArr[i-1]])
+			k = max(k,commonPrefix(s,suffixArr[i],suffixArr[i-1]));
+	}
+	//if(k < K)k개 보다 적으면 출력하지 않는다.
+	cout<<k<<endl;
+}
+
+
+vector<int> getSuffixArray(const string& s)//접미사 배열을 만든다. 여기서 접미사 배열은 문자열s의 인덱스를 가지고 있다.
+{
+	int n = s.size();
+	
+	vector<int> group(n+1);//*
+	for(int i=0;i<n;++i) group[i] = s[i];
+	group[n] = -1;//*
+		
+	vector<int> perm(n);//문자열의 인덱스
+	for(int i = 0; i<n; ++i) perm[i]= i;
+	
+	int t = 1;
+	while(t < n)
+	{
+		Comparator comp2T(group,t);
+	
+		sort(perm.begin(),perm.end(), comp2T);
+		
+		t *= 2;
+		
+		if(t>=n) break;//*
+		vector<int> newgroup(n+1);//*
+		newgroup[n] = -1;//*
+		newgroup[perm[0]] = 0;//*
+		
+		for(int i = 1; i<n; ++i)
+		{
+			if(comp2T(perm[i-1], perm[i]))
+				newgroup[perm[i]] = newgroup[perm[i-1]]+1;
+			else
+				newgroup[perm[i]] = newgroup[perm[i-1]];
+		}
+		
+		group = newgroup;
+	}
+	return perm;
+}
+
+int commonPrefix(const string& s, int i, int j)
+{
+	int k = 0;
+	while(i < s.size()&& j < s.size() && s[i]==s[j])
+	{
+		++i;++j;++k;
+	}
+	return k;
+}
