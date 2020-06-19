@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+void postorder(const vector<int>& f, const vector<int>& m);
+
+int main()
+{
+	int tmp[7]={27,16,9,12,54,36,72};
+	vector<int> front(tmp,tmp+7);
+	int tmp1[7]={9,12,16,27,36,54,72};
+	vector<int> mid(tmp1,tmp1+7);
+	cout<<find(mid.begin(),mid.end(),27)-mid.begin()<<endl;
+	postorder(front,mid);
+	
+}
+
+vector<int> slice(const vector<int>& v, int a, int b)
+{
+	return vector<int>(v.begin() + a, v.begin() + b);
+}
+void postorder(const vector<int>& f, const vector<int>& m)
+{
+	int n = f.size();
+	
+	if(	f.empty()) return;
+	const int root = f[0];
+	
+	int l_Node = 0;
+	int r_Node = 0;
+	for(int i=0;i<n;++i)
+	{
+		if(m[i]==root)
+		{
+			l_Node = i;
+			r_Node = n-i-1;
+			break;
+		}
+	}
+	//루트를 찾아서 좌우를 나눠주는 작업을 반복한다.
+	postorder(slice(f,1,l_Node + 1), slice(m,0,l_Node));
+	postorder(slice(f,l_Node+1, n), slice(m, l_Node+1, n));
+	
+	cout<<root<<' ';
+}
