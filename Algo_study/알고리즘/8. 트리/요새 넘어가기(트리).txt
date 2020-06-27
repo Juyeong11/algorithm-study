@@ -1,0 +1,91 @@
+각 트리 노드마다 vector<treeNode*>를 가져 트리 모양을 만들어서 할 수 도 있음
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+struct treeNode{
+	int x,y;
+	int r;
+	treeNode(int _x,int _y, int _r): x(_x), y(_y), r(_r)
+	{}
+	
+};
+bool compft (treeNode i,treeNode j) { return (i.r>j.r); }
+
+int dist(const treeNode& a, const treeNode& b);
+
+int isChild(int parent,int child);
+
+int solve(int root);
+
+const int x[100] = {21,15,13,12,19,30,32,32,};
+const int y[100] = {15,15,12,12,19,24,10,9,};
+const int r[100] = {20,10,5,3,2,5,7,4};
+const int n = 8;
+
+vector<treeNode> fortress;
+
+int main()
+{
+	for(int i = 0;i<100;++i)
+	{
+		fortress.push_back(treeNode(x[i],y[i],r[i])); 
+	}
+	
+	sort(fortress.begin(),fortress.begin()+n,compft);
+	
+	int taken = 255;
+	cout<<solve(0)<<endl;
+}
+
+int dist(const treeNode& a, const treeNode& b)
+{
+	return (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
+}
+
+bool iscontain(const treeNode& a,const treeNode& b)
+{
+	return a.r > b.r && (dist(a,b) < (a.r*a.r));
+}
+
+int isChild(int parent,int child)
+{
+	if(!iscontain(fortress[parent],fortress[child])) return false;
+	for(int i=0;i<n;++i)
+	{
+		if(i != parent && i != child && iscontain(fortress[parent], fortress[i])
+		   && iscontain(fortress[i], fortress[child])) return false;
+	}
+	return true;
+}
+
+int height(int root)
+{
+	int ret = 0;
+	for(int i=root;i<n;++i)
+	{
+		if(isChild(root, i))
+			ret = max(ret, height(i) + 1);
+	}
+	return ret;
+}
+
+bool desc(int a, int b){ return a > b; }
+
+int solve(int root)
+{
+	vector<int> t;
+	for(int i=0;i<n;++i)
+	{
+		if(isChild(root, i))
+		{
+			t.push_back(height(i));// 가장 큰 요새의 자식 요새를 찾는다
+		}
+	}
+	sort(t.begin(),t.end(), desc);자식요새들 중 가장 많이 둘러싸인 요새와 두번째로 많이 둘러싸인 요새를 찾아 더한다
+
+	return t[0]+t[1]+2;
+	
+}
