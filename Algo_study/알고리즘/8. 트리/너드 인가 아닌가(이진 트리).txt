@@ -1,0 +1,57 @@
+
+이 문제에서 자료구조로 트리를 선택한 이유
+	- 새로운 너드의 값이 주어졌을 때 해당 값의 바로 오른쪽 부분만 비교해보면 이 너드가 기존 너드 보다 더 너드라는 것을 알 수 있기 때문이다.
+	  그러므로 새로운 값보다 바로 오른쪽에 있는 값을 빨리 찾을 수 있으며 찾고나서 삭제와 삽입을 빠르게 실행할 수 있는 트리가 어울리기 때문이다.
+	
+
+map<int, int> coords;
+
+bool isDominated(int x, int y) -> 오른쪽 점을 찾는다.
+{
+	여기서 이해가 안됬던게 lower_boun를 찾는다고 해서 왜 바로 오른쪽 값이라고 확신 할 수 있는지.
+		- 자료구조가 트리라는 것이 자료가 저장되는 방식이 트리 형식이라는 거지 막 이상하게 저장하는게 아니라는거
+		  솔직히 트리가 너무 생소했다.
+	map<int, int>::iterator it = coords.lower_bound(x);-> x이상의 키 중 가장 작은 값을 돌려준다.
+	
+	
+	if(it == coords.end()) return false;
+	
+	
+	이 점은  x보다 오른쪽에 있는 점 중 가장 위에 있는 점이므로, (x, y)가 어느 점에 지배되려면 이점에도 지배되어야 한다.
+	return y < it->second;
+}
+
+void removeDominated(int x, int y) -> 왼쪽 점을 찾는다.
+{
+	map<int, int>::iterator it = coords.lower_bound(x);
+	
+	if(it == coords.begin()) return;//왼쪽 점이 없다.
+	--it;
+	
+	while(true)
+	{
+		if(it->second > y) break; // 이 점(x,y)는 it에 지배를 받는다.
+		
+		if(it==coords.begin())
+		{
+			coords.erase(it);//begin에 지배 됨
+			break;
+		}
+		else
+		{
+			map<int, int>::iterator jt = it;//(x,y)에 지배된 점을 지우고 그 자리를 대신한다.
+			--jt;
+			coords.erase(it);
+			it == jt;
+		}
+	}
+}
+
+int registered(int x, int y)
+{
+	if(isDminated(x,y)) return coords.size();
+	
+	removeDominated(x,y);
+	coords[x] = y; ->key값에 value를 저장하는 것이다.
+	return coords.size();
+}
