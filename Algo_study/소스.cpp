@@ -3,17 +3,12 @@
 
 int main()
 {
-	vector<vector<int>> adj;
-
-	int graph_f[] = {
-		0,2,0,0,0,
-		0,0,3,0,0,
-		0,0,0,0,0,
-		0,0,0,0,0,
-		0,0,0,0,0
-	};
-	create(adj, graph_f, sizeof(graph_f) / sizeof(int));
-
+	graph_create();
+	vector<int> o = bfs(0);
+	for (int a : o)
+		cout << a << " ";
 	return 0;
 }
+
+
 

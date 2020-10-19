@@ -1,3 +1,10 @@
 #pragma once
 
-void create(vector<vector<int>> adj, int factor[], int factor_size);
+class Graph {
+private:
+
+public:
+
+};
+void graph_create();
+vector<int> bfs(int start);
