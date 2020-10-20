@@ -4,7 +4,7 @@
 int main()
 {
 	graph_create();
-	vector<int> o = bfs(0);
+	vector<int> o = bfs(1);
 	for (int a : o)
 		cout << a << " ";
 	return 0;
