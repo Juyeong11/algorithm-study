@@ -139,7 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="graph.cpp" />
-    <ClCompile Include="소스.cpp" />
+    <ClCompile Include="29.2_sort_game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
