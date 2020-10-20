@@ -5,14 +5,10 @@
 #include<queue>
 int main()
 {
-	graph_create();
-	vector<int> o = bfs(1);
-	for (int a : o)
-		cout << a << " ";
 	return 0;
 }
 
-int bfs(const vector<int>& perm)
+int sort_game_bfs(const vector<int>& perm)
 {
 	int n = perm.size();
 
@@ -21,6 +17,30 @@ int bfs(const vector<int>& perm)
 
 	queue<vector<int>> q;
 	map<vector<int>, int> distance;
-	return 1;
-}
 
+	distance[perm] = 0;
+	q.push(perm);
+	while (!q.empty())
+	{
+		vector<int> here = q.front();
+		q.pop();
+
+		if (here == sorted) return distance[here];
+		int cost = distance[here];
+
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = i + 2; j <= n; ++j)
+			{
+				reverse(here.begin()+i, here.begin()+j);
+				if (distance.count(here) == 0)
+				{
+					distance[here] = cost + 1;
+					q.push(here);
+				}
+				reverse(here.begin() + i, here.begin() + j);
+			}
+		}
+	}
+	return -1;
+}
