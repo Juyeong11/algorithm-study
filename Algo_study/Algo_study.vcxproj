@@ -138,8 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="29.4 어린이날.cpp" />
     <ClCompile Include="graph.cpp" />
-    <ClCompile Include="29.2_sort_game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />

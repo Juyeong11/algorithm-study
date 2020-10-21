@@ -18,7 +18,7 @@
     <ClCompile Include="graph.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="29.2_sort_game.cpp">
+    <ClCompile Include="29.4 어린이날.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

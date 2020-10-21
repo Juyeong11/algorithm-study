@@ -3,6 +3,9 @@
 
 #include<map>
 #include<queue>
+
+using namespace std;
+
 int main()
 {
 	return 0;
@@ -83,7 +86,7 @@ int solve(const vector<int>& perm)
 	vector<int> fixed(n);
 	for (int i = 0; i < n; ++i)
 	{
-		int smaller = 0;
+		int smaller = 0;//숫자 크기에 관계없이 대소 유무만 따져서 순서를 매긴다
 		for (int j = 0; j < n; ++j)
 		{
 			if (perm[j] < perm[i])

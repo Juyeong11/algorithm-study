@@ -1,7 +1,10 @@
 #include"config.h"
 #include"graph.h"
 
-#include<queue>
+
+
+
+
 vector<vector<int>> adj;
 
 int node_arr[] = {
