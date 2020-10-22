@@ -49,7 +49,7 @@ int append(int here, int edge, int mod)
 
 string gifts(string digits, int n, int m)
 {
-	sort(digits.begin(), digits.end());
+	//사용가능한 숫자 목록t(digits.begin(), digits.end());
 
 	vector<int> parent(2 * n, -1), choice(2 * n, -1);
 	queue <int> q;
