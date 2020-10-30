@@ -107,3 +107,35 @@ vector<int> shortestPath(int v, const vector<int>& parent)
 	reverse(path.begin(), path.end());
 	return path;
 }
+
+int V_dij;
+
+const int MAX_V_dij = 100;
+vector<pair<int, int>> adj_dij[MAX_V_dij];
+
+vector<int> dijkstra(int src)
+{
+	vector<int> dist(V_dij, INFINITY);
+	dist[src] = 0;
+
+	priority_queue<pair<int, int>> pq;
+	pq.push(make_pair(0, src));
+	while (!pq.empty()) {
+		int cost = -pq.top().first;
+		int here = pq.top().second;
+		pq.pop();
+
+		if (dist[here] < cost) continue;
+
+		for (int i = 0; i < adj_dij[here].size(); ++i) {
+			int there = adj_dij[here][i].first;
+			int nextDist = cost + adj_dij[here][i].second;
+			if (dist[there] > nextDist) {
+				dist[there] = nextDist;
+				pq.push(make_pair(-nextDist, there));//우선순위 큐에 비교 연산자를 오버로딩 안하고-를 붙여 작은것이 먼저 나오도록 하였다.
+			}
+		}
+	}
+
+	return dist;
+}

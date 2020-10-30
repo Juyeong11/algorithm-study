@@ -18,7 +18,7 @@
     <ClCompile Include="graph.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="30.6 소방차.cpp">
+    <ClCompile Include="30.7 철인 N종 경기.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

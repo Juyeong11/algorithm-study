@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="30.7 철인 N종 경기.cpp" />
     <ClCompile Include="graph.cpp" />
   </ItemGroup>
   <ItemGroup>

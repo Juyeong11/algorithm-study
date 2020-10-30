@@ -9,3 +9,4 @@ public:
 };
 void graph_create();
 vector<int> bfs(int start);
+vector<int> dijkstra(int src);
