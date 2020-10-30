@@ -67,3 +67,31 @@ int solve(const vector<int>& a, const vector<int>& b)
 	if (ret == INFINITY) return -1;
 	return ret;
 }
+
+int bf_V;
+
+vector<pair<int, int>> bf_adj[400];
+
+vector<int> bellmanford(int src)
+{
+	vector<int> upper(bf_V, INFINITY);
+	upper[src] = 0;
+	bool updated;
+
+	for (int iter = 0; iter < V; ++iter) {
+		updated = false;
+		for (int here = 0; here < V; ++here) 
+			for (int i = 0; i < bf_adj[here].size(); ++i) {
+				int there = adj[here][i].first;
+				int cost = adj[here][i].second;
+				if (upper[there] > upper[here] + cost) {//이게 결국 가장 짧은 거리로 연결된 정점을 찾아 가는 거잖아 다익스트라랑 거의 비슷한거 아닌가??
+					upper[there] = upper[here] + cost;
+					updated = true;
+				}
+			}
+		if (!updated)break;
+		
+	}
+	if (updated) upper.clear();//v번째 순회에서도 완화가 성공했다면 음수 사이클이 있다.
+	return upper;
+}
