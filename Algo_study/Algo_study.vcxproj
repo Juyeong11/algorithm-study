@@ -138,7 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="30.10시간여행.cpp" />
+    <ClCompile Include="30.12플로이드의 모든 쌍 최단 거리 알고리즘.cpp" />
     <ClCompile Include="graph.cpp" />
   </ItemGroup>
   <ItemGroup>
