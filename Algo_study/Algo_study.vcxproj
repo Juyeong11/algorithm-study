@@ -138,8 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="30.15 선거 공약.cpp" />
     <ClCompile Include="graph.cpp" />
+    <ClCompile Include="최소 스패닝 트리.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
