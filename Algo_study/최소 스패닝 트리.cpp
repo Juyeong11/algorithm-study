@@ -33,6 +33,10 @@ namespace Minimum_spanning {
 
 	vector<pair<int, int>> adj[MAX_V];
 
+	/*
+	가중치가 최소인 정점들끼리 연결하면서 스패닝 트리를 완성한다
+	사이클을 돌면 스패닝트리가 아니기 때문에 사이클을 확인해주는것이 핵심
+	*/
 	int kruskal(vector<pair<int, int>>& selected)
 	{
 		int ret = 0;
@@ -58,6 +62,9 @@ namespace Minimum_spanning {
 		}
 		return ret;
 	}
+	/*
+	시작점부터 시작해 간선을 하나씩 추가하며 스패닝 트리가 될 때 까지 키워간다.
+	*/
 	const int INF = numeric_limits<int>::max();
 
 	int prim(vector<pair<int, int>>& selected) {

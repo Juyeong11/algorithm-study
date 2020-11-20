@@ -138,8 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="31.4 근거리 네트워크.cpp" />
     <ClCompile Include="graph.cpp" />
-    <ClCompile Include="최소 스패닝 트리.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
