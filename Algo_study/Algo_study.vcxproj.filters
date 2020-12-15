@@ -18,7 +18,7 @@
     <ClCompile Include="graph.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="31.4 근거리 네트워크.cpp">
+    <ClCompile Include="게임판 덮기.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
