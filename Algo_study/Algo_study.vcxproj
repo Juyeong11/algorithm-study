@@ -139,7 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="graph.cpp" />
-    <ClCompile Include="게임판 덮기.cpp" />
+    <ClCompile Include="알고리즘\5. 조합 탐색\알러지가 심한 친구들.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
