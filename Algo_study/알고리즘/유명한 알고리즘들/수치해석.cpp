@@ -56,4 +56,57 @@ double payment(double amount, int duration, double rates)
 	}
 	return hi;
 }
+
+삼분 검색
+함수에서 극대점이 1개 있고, 극대점 왼쪽은 순증가, 오른쪽은 순감소 할때 사용가능 한 방법(당연한 말이지만 극소점으로도 가능한다)
+->최대점을 포함하는 구간을 알고 있어야 한다 (lo, hi)
+ 구간의 크기가 매 반복마다 2/3으로 줄어 들기 때문에 n회 반복하고 나면 구간의 길이는 hi-lo * (2/3)^n 이 된다.
+
+double f(double x);//최대치를 찾을 함수
+
+double ternary(double lo, double hi){
+	for(int iter =0; iter<100;iter++)
+		double a = (2*lo + hi)/3.0;//1/3지점
+		double b = (lo + 2*hi)/3.0;//2/3지점0
+		if(f(a)>f(b))
+			hi = b;
+		else
+			lo = a;
+	return (lo+hi)/2.0;
+}
+
+철인 2종 경기
+선형 함수와 볼록 함수p485
+double t;
+vector<double> runSpeed, cycleSpeed;
+
+double time(int i, double run)
+{
+	double cycle = t - run;
+	return run / runSpeed[i] + cycle / cycleSpeed[i];
+}
+
+double diff(double r) {
+	int n = runSpeed.size();
+	double cheater = time(n - 1, r);
+	double others = time(0, r);
+	for (int i = 1; i < n - 1; ++i)
+		others = min(others, time(i, r));
+	return others - cheater;
+}
+
+double maxDifference()
+{
+	double lo = 0, hi = t;
+	for (int it = 0; it < 100; ++it)
+	{
+		double aab = (2 * lo + hi) / 3;
+		double abb = (lo + 2 * hi) / 3;
+		if (diff(aab) > diff(abb))
+			hi = abb;
+		else
+			lo = aab;
+	}
+	return (lo + hi) / 2;
+}
 */
